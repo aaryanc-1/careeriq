@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #16161f;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --text: #f0f0f5;
+    --muted: #7a7a90;
+    --accent: #6c63ff;
+    --accent2: #00e5a0;
+    --accent3: #ff6b6b;
+    --amber: #ffb347;
+    --font-head: 'Syne', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font-body); min-height: 100vh; }
+
+  /* Layout */
+  .shell { display: flex; min-height: 100vh; }
+  .sidebar {
+    width: 220px; min-height: 100vh; background: var(--bg2);
+    border-right: 1px solid var(--border); padding: 28px 0; flex-shrink: 0;
+    display: flex; flex-direction: column;
+  }
+  .logo { padding: 0 24px 28px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+  .logo-mark { font-family: var(--font-head); font-size: 18px; font-weight: 800; letter-spacing: -0.5px; }
+  .logo-mark span { color: var(--accent2); }
+  .logo-sub { font-size: 10px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; font-family: var(--font-mono); }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px; padding: 9px 24px;
+    font-size: 13.5px; color: var(--muted); cursor: pointer; transition: all 0.15s;
+    border-left: 2px solid transparent; font-weight: 400;
+  }
+  .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+  .nav-item.active { color: var(--text); border-left-color: var(--accent); background: rgba(108,99,255,0.08); }
+  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+  .main { flex: 1; overflow-y: auto; }
+  .page { display: none; padding: 40px 48px; }
+  .page.active { display: block; }
+
+  /* Header */
+  .page-header { margin-bottom: 36px; }
+  .page-title { font-family: var(--font-head); font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .page-sub { color: var(--muted); font-size: 14px; margin-top: 6px; }
+
+  /* Cards */
+  .card {
+    background: var(--bg2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+  }
+  .card-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.5px; font-family: var(--font-mono); margin-bottom: 8px; }
+
+  /* Upload */
+  .upload-zone {
+    border: 1.5px dashed var(--border2); border-radius: 16px;
+    padding: 60px; text-align: center; cursor: pointer; transition: all 0.2s;
+    background: var(--bg3);
+  }
+  .upload-zone:hover { border-color: var(--accent); background: rgba(108,99,255,0.05); }
+  .upload-zone.active { border-color: var(--accent2); background: rgba(0,229,160,0.05); }
+  .upload-icon { font-size: 48px; margin-bottom: 16px; }
+  .upload-title { font-family: var(--font-head); font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+  .upload-sub { color: var(--muted); font-size: 14px; line-height: 1.6; }
+  .upload-btn {
+    display: inline-block; margin-top: 24px; padding: 11px 28px;
+    background: var(--accent); color: white; border-radius: 8px; font-size: 14px;
+    font-weight: 500; cursor: pointer; transition: all 0.2s; border: none;
+    font-family: var(--font-body);
+  }
+  .upload-btn:hover { background: #5a52e8; transform: translateY(-1px); }
+
+  .or-divider { display: flex; align-items: center; gap: 16px; margin: 32px 0; color: var(--muted); font-size: 13px; }
+  .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .textarea-input {
+    width: 100%; background: var(--bg3); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-family: var(--font-mono);
+    font-size: 13px; padding: 16px; resize: vertical; min-height: 180px;
+    line-height: 1.6; outline: none; transition: border-color 0.15s;
+  }
+  .textarea-input:focus { border-color: var(--accent); }
+
+  .analyze-btn {
+    width: 100%; padding: 14px; background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: var(--bg); border-radius: 10px; font-size: 15px; font-weight: 600;
+    cursor: pointer; border: none; font-family: var(--font-head); letter-spacing: 0.3px;
+    transition: all 0.2s; margin-top: 16px;
+  }
+  .analyze-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+  /* Career cards grid */
+  .careers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .career-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+    padding: 20px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+  }
+  .career-card:hover { border-color: var(--border2); transform: translateY(-1px); }
+  .career-card.top { border-color: var(--accent); }
+  .career-card.top::before {
+    content: 'TOP MATCH'; position: absolute; top: 12px; right: 12px;
+    font-size: 9px; font-family: var(--font-mono); color: var(--accent);
+    letter-spacing: 1.5px; background: rgba(108,99,255,0.1); padding: 3px 8px; border-radius: 4px;
+  }
+  .career-name { font-family: var(--font-head); font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+  .score-bar-bg { height: 4px; background: var(--border); border-radius: 2px; margin-bottom: 12px; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease; }
+  .career-meta { display: flex; justify-content: space-between; align-items: center; }
+  .score-num { font-family: var(--font-mono); font-size: 22px; font-weight: 500; }
+  .career-stats { display: flex; gap: 12px; }
+  .stat-pill { font-size: 12px; padding: 4px 10px; border-radius: 20px; font-family: var(--font-mono); }
+  .stat-salary { background: rgba(0,229,160,0.1); color: var(--accent2); }
+  .stat-growth { background: rgba(255,179,71,0.1); color: var(--amber); }
+
+  /* Skills */
+  .skills-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .skill-tag {
+    font-size: 12px; padding: 5px 12px; border-radius: 20px; font-family: var(--font-mono);
+    background: var(--bg3); border: 1px solid var(--border); color: var(--muted);
+  }
+  .skill-tag.have { background: rgba(0,229,160,0.08); border-color: rgba(0,229,160,0.2); color: var(--accent2); }
+  .skill-tag.missing-required { background: rgba(255,107,107,0.08); border-color: rgba(255,107,107,0.2); color: var(--accent3); }
+  .skill-tag.missing-important { background: rgba(255,179,71,0.08); border-color: rgba(255,179,71,0.2); color: var(--amber); }
+
+  /* Gap analysis */
+  .gap-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+  .big-score { font-family: var(--font-head); font-size: 64px; font-weight: 800; line-height: 1; }
+  .score-ring-wrap { position: relative; width: 80px; height: 80px; }
+  .score-ring-wrap svg { transform: rotate(-90deg); }
+
+  /* Roadmap */
+  .roadmap-timeline { position: relative; padding-left: 32px; }
+  .roadmap-timeline::before {
+    content: ''; position: absolute; left: 9px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--border);
+  }
+  .roadmap-step { position: relative; margin-bottom: 28px; }
+  .roadmap-dot {
+    position: absolute; left: -32px; top: 4px;
+    width: 20px; height: 20px; border-radius: 50%; background: var(--bg3);
+    border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 9px; color: var(--muted);
+  }
+  .roadmap-dot.done { background: var(--accent2); border-color: var(--accent2); color: var(--bg); }
+  .roadmap-dot.project { background: var(--accent); border-color: var(--accent); color: white; }
+  .roadmap-month { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-bottom: 6px; }
+  .roadmap-content { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; }
+  .roadmap-milestone { font-size: 14px; font-weight: 500; margin-bottom: 6px; }
+  .roadmap-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .roadmap-skill { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: rgba(108,99,255,0.1); color: var(--accent); font-family: var(--font-mono); border: 1px solid rgba(108,99,255,0.2); }
+  .roadmap-project { font-size: 13px; color: var(--muted); margin-top: 6px; }
+  .roadmap-project::before { content: '→ '; color: var(--accent2); }
+
+  /* Market */
+  .market-bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .market-skill-name { font-family: var(--font-mono); font-size: 12px; color: var(--muted); width: 160px; flex-shrink: 0; }
+  .market-bar-bg { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+  .market-bar-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+  .market-demand { font-family: var(--font-mono); font-size: 11px; color: var(--muted); width: 32px; text-align: right; }
+
+  /* Stats row */
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .stat-val { font-family: var(--font-head); font-size: 28px; font-weight: 700; }
+  .stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* Target selector */
+  .target-select {
+    background: var(--bg3); border: 1px solid var(--border); color: var(--text);
+    padding: 8px 14px; border-radius: 8px; font-size: 13px; font-family: var(--font-body);
+    outline: none; cursor: pointer;
+  }
+  .target-select:focus { border-color: var(--accent); }
+
+  /* Resources */
+  .resource-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .resource-item:last-child { border-bottom: none; }
+  .resource-type { font-size: 10px; font-family: var(--font-mono); padding: 3px 8px; border-radius: 4px; margin-top: 2px; flex-shrink: 0; letter-spacing: 1px; }
+  .resource-type.course { background: rgba(108,99,255,0.1); color: var(--accent); }
+  .resource-type.book { background: rgba(0,229,160,0.1); color: var(--accent2); }
+  .resource-type.practice { background: rgba(255,179,71,0.1); color: var(--amber); }
+  .resource-type.cert { background: rgba(255,107,107,0.1); color: var(--accent3); }
+  .resource-type.docs { background: rgba(122,122,144,0.15); color: var(--muted); }
+  .resource-name { font-size: 13.5px; font-weight: 500; margin-bottom: 3px; }
+  .resource-skill { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+
+  /* Loading */
+  .loading { text-align: center; padding: 80px 40px; }
+  .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { color: var(--muted); font-size: 14px; font-family: var(--font-mono); }
+  .loading-steps { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .loading-step { font-size: 13px; color: var(--border2); transition: color 0.3s; }
+  .loading-step.done { color: var(--accent2); }
+  .loading-step.active { color: var(--text); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .section-title { font-family: var(--font-head); font-size: 15px; font-weight: 600; margin-bottom: 16px; }
+  .legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; color: var(--muted); }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .empty-state { text-align: center; padding: 60px; color: var(--muted); font-size: 14px; }
+  .empty-icon { font-size: 40px; margin-bottom: 12px; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+<div class="shell">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">Career<span>IQ</span></div>
+      <div class="logo-sub">Intelligence Platform</div>
+    </div>
+    <div class="nav-item active" onclick="nav('upload')"><span class="nav-dot"></span> Upload Resume</div>
+    <div class="nav-item" onclick="nav('matches')" id="nav-matches"><span class="nav-dot"></span> Career Matches</div>
+    <div class="nav-item" onclick="nav('gap')" id="nav-gap"><span class="nav-dot"></span> Gap Analysis</div>
+    <div class="nav-item" onclick="nav('roadmap')" id="nav-roadmap"><span class="nav-dot"></span> Roadmap</div>
+    <div class="nav-item" onclick="nav('market')" id="nav-market"><span class="nav-dot"></span> Market Intel</div>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Upload Page -->
+    <div class="page active" id="page-upload">
+      <div class="page-header">
+        <div class="page-title">Analyze Your Career Path</div>
+        <div class="page-sub">Paste your resume or upload a PDF to get your personalized intelligence report.</div>
+      </div>
+
+      <div class="upload-zone" id="upload-zone" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+        <div class="upload-icon">📄</div>
+        <div class="upload-title">Drop your resume here</div>
+        <div class="upload-sub">PDF, DOCX, or plain text · Processed locally</div>
+        <input type="file" id="file-input" style="display:none" accept=".pdf,.txt,.doc,.docx" onchange="handleFile(this)">
+        <button class="upload-btn" onclick="document.getElementById('file-input').click()">Choose File</button>
+      </div>
+
+      <div class="or-divider">or paste resume text</div>
+
+      <textarea class="textarea-input" id="resume-text" placeholder="Paste your resume here — education, experience, skills, projects..."></textarea>
+
+      <div style="margin-top: 16px;">
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 8px;">Target career (optional):</div>
+        <select class="target-select" id="target-select">
+          <option value="">Auto-detect best match</option>
+          <option>Data Analyst</option>
+          <option>Data Scientist</option>
+          <option>ML Engineer</option>
+          <option>Data Engineer</option>
+          <option>Software Engineer</option>
+          <option>Business Analyst</option>
+          <option>Quantitative Analyst</option>
+          <option>AI Engineer</option>
+          <option>Analytics Engineer</option>
+          <option>Product Analyst</option>
+        </select>
+      </div>
+
+      <button class="analyze-btn" onclick="runAnalysis()">⚡ Generate Intelligence Report</button>
+    </div>
+
+    <!-- Loading state (shown during analysis) -->
+    <div class="page" id="page-loading">
+      <div class="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Analyzing your profile...</div>
+        <div class="loading-steps">
+          <div class="loading-step" id="step1">📄 Parsing resume & extracting skills</div>
+          <div class="loading-step" id="step2">🎯 Matching against 10 career paths</div>
+          <div class="loading-step" id="step3">🔍 Running skill gap analysis</div>
+          <div class="loading-step" id="step4">🗺️ Generating personalized roadmap</div>
+          <div class="loading-step" id="step5">📈 Computing market intelligence</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Matches Page -->
+    <div class="page" id="page-matches">
+      <div class="page-header">
+        <div class="page-title">Career Compatibility</div>
+        <div class="page-sub" id="matches-sub">Based on your skills profile</div>
+      </div>
+      <div class="stats-row" id="stats-row"></div>
+      <div class="careers-grid" id="careers-grid"></div>
+    </div>
+
+    <!-- Gap Analysis Page -->
+    <div class="page" id="page-gap">
+      <div class="page-header" style="display:flex; align-items:flex-start; justify-content:space-between;">
+        <div>
+          <div class="page-title">Skill Gap Analysis</div>
+          <div class="page-sub">What you have vs. what you need</div>
+        </div>
+        <select class="target-select" id="gap-career-select" onchange="updateGapAnalysis()"></select>
+      </div>
+      <div id="gap-content"></div>
+    </div>
+
+    <!-- Roadmap Page -->
+    <div class="page" id="page-roadmap">
+      <div class="page-header" style="display:flex; align-items:flex-start; justify-content:space-between;">
+        <div>
+          <div class="page-title">Learning Roadmap</div>
+          <div class="page-sub" id="roadmap-sub">Your personalized path forward</div>
+        </div>
+        <select class="target-select" id="roadmap-career-select" onchange="updateRoadmap()"></select>
+      </div>
+      <div id="roadmap-content"></div>
+    </div>
+
+    <!-- Market Page -->
+    <div class="page" id="page-market">
+      <div class="page-header">
+        <div class="page-title">Market Intelligence</div>
+        <div class="page-sub">Skill demand trends and salary data</div>
+      </div>
+      <div id="market-content"></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// ── Platform Data ─────────────────────────────────────────────────────────────
+
+// ── Platform Data (loaded from data.json — built by build_data.py) ────────────
+// These are populated at startup by loadData() from the static data file,
+// so the site always reflects the latest scraped job-market data.
+let CAREER_PATHS = {};
+let SKILL_CATEGORIES = {};
+let SKILL_ALIASES = {};
+let RESOURCES = {};
+let PROJECT_IDEAS = {};
+let DURATION_WEEKS = {};
+let CAREER_META = {};   // name -> { dataDriven, jobsAnalyzed, industry }
+let DATA_STATS = null;
+
+// Learning resources + durations are kept here (not in data.json) so the
+// roadmap still has links/timing for common skills. Unknown skills default
+// to a generic resource and 3 weeks.
+const RESOURCES_FALLBACK = {
+  "python":[["course","Python for Everybody – Coursera","https://coursera.org/specializations/python"]],
+  "sql":[["course","Mode SQL Tutorial – Free","https://mode.com/sql-tutorial"]],
+  "machine learning":[["course","Andrew Ng ML Specialization – Coursera","https://coursera.org/specializations/machine-learning-introduction"]],
+  "statistics":[["course","Statistics with Python – Coursera","https://coursera.org/specializations/statistics-with-python"]],
+  "excel":[["course","Excel Skills for Business – Coursera","https://coursera.org/specializations/excel"]],
+};
+
+async function loadData() {
+  const res = await fetch('data.json?v=' + Date.now());
+  const data = await res.json();
+  DATA_STATS = data.stats;
+
+  // Build CAREER_PATHS in the shape the UI expects: {salary, growth, required, important, nice}
+  data.careers.forEach(c => {
+    CAREER_PATHS[c.name] = {
+      salary: c.avg_salary,
+      growth: c.growth,
+      required: c.required || [],
+      important: c.important || [],
+      nice: c.nice_to_have || [],
+    };
+    CAREER_META[c.name] = {
+      dataDriven: !!c.data_driven,
+      jobsAnalyzed: c.jobs_analyzed || 0,
+      industry: c.industry || 'Other',
+    };
+  });
+
+  // Skill categories come straight from the taxonomy
+  SKILL_CATEGORIES = data.taxonomy || {};
+
+  // Aliases: skill_lookup maps every term (incl. aliases) -> canonical.
+  // Keep only the entries where term != canonical (the real aliases).
+  SKILL_ALIASES = {};
+  Object.entries(data.skill_lookup || {}).forEach(([term, canon]) => {
+    if (term !== canon) SKILL_ALIASES[term] = canon;
+  });
+
+  RESOURCES = RESOURCES_FALLBACK;
+  PROJECT_IDEAS = {};   // roadmap shows generic project prompt when absent
+  DURATION_WEEKS = {};  // unknown -> default 3 weeks (handled in generateRoadmap)
+
+  // Populate the target-career dropdown with all careers, grouped by industry,
+  // with a small marker showing which are backed by live data.
+  const sel = document.getElementById('target-select');
+  if (sel) {
+    const byIndustry = {};
+    data.careers.forEach(c => {
+      (byIndustry[c.industry || 'Other'] ||= []).push(c);
+    });
+    let html = '<option value="">Auto-detect best match</option>';
+    Object.keys(byIndustry).sort().forEach(ind => {
+      html += `<optgroup label="${ind}">`;
+      byIndustry[ind].sort((a,b)=>a.name.localeCompare(b.name)).forEach(c => {
+        const tag = c.data_driven ? ' • live data' : '';
+        html += `<option value="${c.name}">${c.name}${tag}</option>`;
+      });
+      html += '</optgroup>';
+    });
+    sel.innerHTML = html;
+  }
+}
+
+// ── Skill Extraction ──────────────────────────────────────────────────────────
+
+function extractSkills(text) {
+  const lower = text.toLowerCase().replace(/[^\w\s\/\+\#\-\.]/g, ' ');
+  const found = new Set();
+
+  // Collect all skill phrases (from all categories + aliases)
+  const allSkills = [];
+  Object.values(SKILL_CATEGORIES).forEach(skills => skills.forEach(s => allSkills.push(s)));
+  Object.values(CAREER_PATHS).forEach(cp => {
+    [...cp.required, ...cp.important, ...cp.nice].forEach(s => allSkills.push(s));
+  });
+  const unique = [...new Set(allSkills)].sort((a,b) => b.length - a.length);
+
+  unique.forEach(skill => {
+    const escaped = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`(?<![\\w])${escaped}(?![\\w])`, 'i');
+    if (re.test(lower)) found.add(skill);
+  });
+
+  // Aliases
+  Object.entries(SKILL_ALIASES).forEach(([alias, canonical]) => {
+    const re = new RegExp(`(?<![\\w])${alias.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?![\\w])`, 'i');
+    if (re.test(lower)) found.add(canonical);
+  });
+
+  return [...found];
+}
+
+function getCategory(skill) {
+  for (const [cat, skills] of Object.entries(SKILL_CATEGORIES)) {
+    if (skills.includes(skill)) return cat;
+  }
+  return 'other';
+}
+
+// ── Career Matching ───────────────────────────────────────────────────────────
+
+function scoreCareer(userSkills, careerName) {
+  const cp = CAREER_PATHS[careerName];
+  const has = new Set(userSkills.map(s => s.toLowerCase()));
+  let earned = 0, possible = 0;
+  const matched = [], missingReq = [], missingImp = [], missingNice = [];
+
+  cp.required.forEach(s => { possible += 3; if (has.has(s)) { earned += 3; matched.push(s); } else missingReq.push(s); });
+  cp.important.forEach(s => { possible += 2; if (has.has(s)) { earned += 2; matched.push(s); } else missingImp.push(s); });
+  cp.nice.forEach(s => { possible += 1; if (has.has(s)) { earned += 1; matched.push(s); } else missingNice.push(s); });
+
+  return {
+    score: Math.round((earned / possible) * 100),
+    matched, missingReq, missingImp, missingNice,
+    salary: cp.salary, growth: cp.growth
+  };
+}
+
+function matchAllCareers(userSkills) {
+  return Object.keys(CAREER_PATHS)
+    .map(name => ({ career: name, ...scoreCareer(userSkills, name) }))
+    .sort((a,b) => b.score - a.score);
+}
+
+// ── Roadmap Generation ────────────────────────────────────────────────────────
+
+function generateRoadmap(userSkills, careerName) {
+  const scored = scoreCareer(userSkills, careerName);
+  const gaps = [...scored.missingReq, ...scored.missingImp, ...scored.missingNice];
+  if (!gaps.length) return { steps: [], noGaps: true };
+
+  const steps = [];
+  let month = 1, bucket = [], bucketWeeks = 0;
+
+  gaps.forEach(skill => {
+    const w = DURATION_WEEKS[skill] || 3;
+    if (bucketWeeks + w > 5 && bucket.length) {
+      steps.push({ month: month++, skills: [...bucket], weeks: bucketWeeks });
+      bucket = []; bucketWeeks = 0;
+    }
+    bucket.push(skill); bucketWeeks += w;
+  });
+  if (bucket.length) steps.push({ month: month++, skills: [...bucket], weeks: bucketWeeks });
+
+  steps.push({
+    month: month,
+    skills: [],
+    isProject: true,
+    projects: (PROJECT_IDEAS[careerName] || []).slice(0,2)
+  });
+
+  return { steps, totalGaps: gaps.length, scored };
+}
+
+// ── State ──────────────────────────────────────────────────────────────────────
+
+let state = { profile: null, matches: null, target: null };
+
+// ── Main Analysis ──────────────────────────────────────────────────────────────
+
+function runAnalysis() {
+  if (!Object.keys(CAREER_PATHS).length) { alert('Still loading job-market data — give it a second and try again.'); return; }
+  const text = document.getElementById('resume-text').value.trim();
+  if (!text) { alert('Please paste your resume text first.'); return; }
+
+  const target = document.getElementById('target-select').value;
+
+  // Show loading
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-loading').classList.add('active');
+
+  const steps = ['step1','step2','step3','step4','step5'];
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i > 0) document.getElementById(steps[i-1]).classList.remove('active');
+    if (i < steps.length) {
+      document.getElementById(steps[i]).classList.add('active');
+      if (i > 0) document.getElementById(steps[i-1]).classList.add('done');
+      i++;
+    } else {
+      clearInterval(interval);
+      steps.forEach(s => document.getElementById(s).classList.add('done'));
+      setTimeout(() => finishAnalysis(text, target), 300);
+    }
+  }, 400);
+}
+
+function finishAnalysis(text, targetCareer) {
+  const skills = extractSkills(text);
+  const matches = matchAllCareers(skills);
+  const target = targetCareer || matches[0].career;
+
+  state.profile = { skills, text };
+  state.matches = matches;
+  state.target = target;
+
+  // Populate career selector dropdowns
+  const careerOptions = matches.map(m => `<option value="${m.career}" ${m.career===target?'selected':''}>${m.career} (${m.score}%)</option>`).join('');
+  document.getElementById('gap-career-select').innerHTML = careerOptions;
+  document.getElementById('roadmap-career-select').innerHTML = careerOptions;
+
+  renderMatches();
+  renderGapAnalysis(target);
+  renderRoadmap(target);
+  renderMarket();
+
+  // Unlock nav
+  ['matches','gap','roadmap','market'].forEach(p => {
+    document.getElementById(`nav-${p}`).style.opacity = '1';
+  });
+
+  nav('matches');
+}
+
+// ── Render: Matches ────────────────────────────────────────────────────────────
+
+function renderMatches() {
+  const { matches, profile } = state;
+  const top = matches[0];
+
+  document.getElementById('matches-sub').textContent =
+    `${profile.skills.length} skills detected · Best match: ${top.career} at ${top.score}%`;
+
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-val">${profile.skills.length}</div>
+      <div class="stat-label">Skills detected</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--accent2)">${top.score}%</div>
+      <div class="stat-label">Top match score</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--amber)">$${(top.salary/1000).toFixed(0)}k</div>
+      <div class="stat-label">Best match salary</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--accent3)">${matches.filter(m=>m.score>=50).length}</div>
+      <div class="stat-label">Roles you qualify for</div>
+    </div>
+  `;
+
+  const scoreColor = s => s >= 70 ? 'var(--accent2)' : s >= 45 ? 'var(--accent)' : s >= 25 ? 'var(--amber)' : 'var(--accent3)';
+
+  document.getElementById('careers-grid').innerHTML = matches.slice(0,8).map((m,i) => {
+    const meta = CAREER_META[m.career] || {};
+    const badge = meta.dataDriven
+      ? `<span class="stat-pill" style="background:rgba(29,158,117,0.15);color:#1D9E75" title="Skills derived from real job postings">📊 ${meta.jobsAnalyzed} live postings</span>`
+      : `<span class="stat-pill" style="background:rgba(186,117,23,0.15);color:#BA7517" title="Hand-curated estimate — live data coming as more sources are added">✎ curated estimate</span>`;
+    return `
+    <div class="career-card ${i===0?'top':''}" onclick="focusCareer('${m.career}')">
+      <div class="career-name">${m.career}</div>
+      <div class="score-bar-bg">
+        <div class="score-bar-fill" style="width:${m.score}%;background:${scoreColor(m.score)}"></div>
+      </div>
+      <div class="career-meta">
+        <div class="score-num" style="color:${scoreColor(m.score)}">${m.score}%</div>
+        <div class="career-stats">
+          <span class="stat-pill stat-salary">$${(m.salary/1000).toFixed(0)}k</span>
+          <span class="stat-pill stat-growth">${m.growth}</span>
+        </div>
+      </div>
+      <div style="margin-top:8px">${badge}</div>
+      <div class="skills-grid" style="margin-top:12px">
+        ${m.matched.slice(0,4).map(s => `<span class="skill-tag have">✓ ${s}</span>`).join('')}
+        ${m.missingReq.slice(0,2).map(s => `<span class="skill-tag missing-required">✗ ${s}</span>`).join('')}
+      </div>
+    </div>
+  `;}).join('');
+}
+
+// ── Render: Gap Analysis ──────────────────────────────────────────────────────
+
+function renderGapAnalysis(careerName) {
+  const { profile, matches } = state;
+  const m = matches.find(x => x.career === careerName) || matches[0];
+  const cp = CAREER_PATHS[careerName];
+
+  const html = `
+    <div class="card" style="margin-bottom:24px">
+      <div style="display:flex;align-items:flex-start;gap:32px">
+        <div>
+          <div class="card-label">Match Score</div>
+          <div class="big-score" style="color:${m.score>=70?'var(--accent2)':m.score>=45?'var(--accent)':'var(--amber)'}">${m.score}%</div>
+        </div>
+        <div style="flex:1">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:4px">
+            <div><div class="card-label">Avg Salary</div><div style="font-size:20px;font-weight:600;color:var(--accent2);font-family:var(--font-head)">$${(cp.salary/1000).toFixed(0)}k</div></div>
+            <div><div class="card-label">Market Growth</div><div style="font-size:20px;font-weight:600;color:var(--amber);font-family:var(--font-head)">${cp.growth}</div></div>
+            <div><div class="card-label">Skills Matched</div><div style="font-size:20px;font-weight:600;font-family:var(--font-head)">${m.matched.length} / ${cp.required.length + cp.important.length + cp.nice.length}</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <div class="section-title" style="color:var(--accent2)">✓ What You Have</div>
+        <div class="card">
+          ${m.matched.length ? `<div class="skills-grid">${m.matched.map(s=>`<span class="skill-tag have">${s}</span>`).join('')}</div>`
+          : '<div style="color:var(--muted);font-size:14px">No matching skills yet — that\'s okay!</div>'}
+        </div>
+      </div>
+      <div>
+        <div class="section-title" style="color:var(--accent3)">✗ Required Skills Missing</div>
+        <div class="card">
+          ${m.missingReq.length ? `<div class="skills-grid">${m.missingReq.map(s=>`<span class="skill-tag missing-required">${s}</span>`).join('')}</div>`
+          : '<div style="color:var(--accent2);font-size:14px">✨ You have all the required skills!</div>'}
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px">
+      <div class="section-title" style="color:var(--amber)">⚡ Important Skills to Add</div>
+      <div class="card">
+        <div class="skills-grid">
+          ${m.missingImp.map(s=>`<span class="skill-tag missing-important">${s}</span>`).join('')}
+          ${m.missingImp.length===0?'<span style="color:var(--accent2);font-size:14px">✨ You have all the important skills!</span>':''}
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px">
+      <div class="section-title">💡 Nice-to-Have Skills</div>
+      <div class="card">
+        <div class="skills-grid">
+          ${m.missingNice.map(s=>`<span class="skill-tag">${s}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    ${m.missingReq.length || m.missingImp.length ? `
+    <div style="margin-top:24px">
+      <div class="section-title">📚 Learning Resources</div>
+      <div class="card">
+        ${[...m.missingReq, ...m.missingImp].flatMap(skill => {
+          const rs = RESOURCES[skill];
+          if (!rs) return [];
+          return rs.map(([type, title, url]) => `
+            <div class="resource-item">
+              <span class="resource-type ${type}">${type}</span>
+              <div>
+                <div class="resource-name"><a href="${url}" style="color:var(--text);text-decoration:none">${title}</a></div>
+                <div class="resource-skill">${skill}</div>
+              </div>
+            </div>`);
+        }).join('') || '<div style="color:var(--muted);font-size:14px">Search Coursera or Kaggle Learn for these skills.</div>'}
+      </div>
+    </div>` : ''}
+  `;
+
+  document.getElementById('gap-content').innerHTML = html;
+}
+
+// ── Render: Roadmap ────────────────────────────────────────────────────────────
+
+function renderRoadmap(careerName) {
+  const { profile } = state;
+  const { steps, totalGaps, noGaps } = generateRoadmap(profile.skills, careerName);
+  const cp = CAREER_PATHS[careerName];
+  const totalWeeks = steps.filter(s=>!s.isProject).reduce((a,s)=>a+s.weeks,0);
+
+  document.getElementById('roadmap-sub').textContent =
+    noGaps ? 'You\'re ready! Focus on projects.' :
+    `~${steps.length} months · ${totalGaps} skills to learn · $${(cp.salary/1000).toFixed(0)}k target salary`;
+
+  if (noGaps) {
+    document.getElementById('roadmap-content').innerHTML = `
+      <div class="card" style="text-align:center;padding:48px">
+        <div style="font-size:40px;margin-bottom:16px">🎉</div>
+        <div style="font-family:var(--font-head);font-size:20px;font-weight:600;margin-bottom:8px">You're already qualified!</div>
+        <div style="color:var(--muted);margin-bottom:24px">Focus on building strong portfolio projects to stand out.</div>
+        <div style="text-align:left">${(PROJECT_IDEAS[careerName]||[]).map(p=>`<div class="roadmap-project" style="margin-bottom:8px">${p}</div>`).join('')}</div>
+      </div>`;
+    return;
+  }
+
+  const html = `
+    <div class="card" style="margin-bottom:28px;display:flex;gap:32px">
+      <div style="text-align:center">
+        <div class="card-label">Timeline</div>
+        <div style="font-size:28px;font-weight:700;font-family:var(--font-head)">${steps.length} mo</div>
+      </div>
+      <div style="text-align:center">
+        <div class="card-label">Skills to Learn</div>
+        <div style="font-size:28px;font-weight:700;font-family:var(--font-head);color:var(--accent)">${totalGaps}</div>
+      </div>
+      <div style="text-align:center">
+        <div class="card-label">Est. Study Weeks</div>
+        <div style="font-size:28px;font-weight:700;font-family:var(--font-head);color:var(--amber)">${totalWeeks}</div>
+      </div>
+      <div style="text-align:center">
+        <div class="card-label">Target Salary</div>
+        <div style="font-size:28px;font-weight:700;font-family:var(--font-head);color:var(--accent2)">$${(cp.salary/1000).toFixed(0)}k</div>
+      </div>
+    </div>
+
+    <div class="roadmap-timeline">
+      ${steps.map(step => `
+        <div class="roadmap-step">
+          <div class="roadmap-dot ${step.isProject ? 'project' : ''}">${step.month}</div>
+          <div class="roadmap-month">MONTH ${step.month}</div>
+          <div class="roadmap-content">
+            ${step.isProject ? `
+              <div class="roadmap-milestone">🚀 Build Portfolio Projects</div>
+              ${step.projects.map(p => `<div class="roadmap-project">${p}</div>`).join('')}
+            ` : `
+              <div class="roadmap-skills">
+                ${step.skills.map(s => `<span class="roadmap-skill">${s}</span>`).join('')}
+              </div>
+              <div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--font-mono)">~${step.weeks} weeks</div>
+            `}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+
+  document.getElementById('roadmap-content').innerHTML = html;
+}
+
+// ── Render: Market Intelligence ────────────────────────────────────────────────
+
+function renderMarket() {
+  // Compute skill demand scores
+  const skillDemand = {};
+  Object.values(CAREER_PATHS).forEach(cp => {
+    cp.required.forEach(s => { skillDemand[s] = (skillDemand[s]||0) + 3; });
+    cp.important.forEach(s => { skillDemand[s] = (skillDemand[s]||0) + 2; });
+    cp.nice.forEach(s => { skillDemand[s] = (skillDemand[s]||0) + 1; });
+  });
+  const topSkills = Object.entries(skillDemand).sort((a,b)=>b[1]-a[1]).slice(0,12);
+  const maxDemand = topSkills[0][1];
+
+  // Career growth data
+  const growthData = Object.entries(CAREER_PATHS)
+    .map(([name, cp]) => ({ name, growth: parseFloat(cp.growth), salary: cp.salary }))
+    .sort((a,b) => b.growth - a.growth);
+
+  // User's valuable skills
+  const userValuable = state.profile.skills
+    .filter(s => skillDemand[s])
+    .map(s => ({ skill: s, score: skillDemand[s] }))
+    .sort((a,b) => b.score - a.score)
+    .slice(0,5);
+
+  document.getElementById('market-content').innerHTML = `
+    <div class="two-col" style="margin-bottom:24px">
+      <div>
+        <div class="section-title">🔥 Most In-Demand Skills</div>
+        <div class="card">
+          ${topSkills.map(([skill, demand]) => `
+            <div class="market-bar-row">
+              <div class="market-skill-name">${skill}</div>
+              <div class="market-bar-bg">
+                <div class="market-bar-fill" style="width:${Math.round((demand/maxDemand)*100)}%"></div>
+              </div>
+              <div class="market-demand">${demand}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="section-title">📈 Fastest Growing Careers</div>
+        <div class="card">
+          ${growthData.map((c,i) => `
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 0;${i>0?'border-top:1px solid var(--border)':''}">
+              <div style="font-family:var(--font-mono);font-size:15px;font-weight:500;color:var(--accent2);width:48px">${c.growth>0?'+':''}${c.growth}%</div>
+              <div style="flex:1">
+                <div style="font-size:13.5px;font-weight:500">${c.name}</div>
+                <div style="font-size:12px;color:var(--muted);font-family:var(--font-mono)">$${(c.salary/1000).toFixed(0)}k avg</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">💎 Your Most Valuable Skills</div>
+      <div class="card">
+        ${userValuable.length ? `
+          <div style="display:flex;gap:16px;flex-wrap:wrap">
+            ${userValuable.map(({skill, score}) => `
+              <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:14px 20px;text-align:center">
+                <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-bottom:4px">DEMAND</div>
+                <div style="font-family:var(--font-head);font-size:22px;font-weight:700;color:var(--accent2)">${score}</div>
+                <div style="font-size:13px;color:var(--text);margin-top:4px">${skill}</div>
+              </div>
+            `).join('')}
+          </div>
+        ` : '<div style="color:var(--muted);font-size:14px">Upload your resume to see your skill value scores.</div>'}
+      </div>
+    </div>
+  `;
+}
+
+// ── Navigation ────────────────────────────────────────────────────────────────
+
+function nav(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById(`page-${page}`).classList.add('active');
+  const navEl = document.getElementById(`nav-${page}`) || document.querySelector(`.nav-item[onclick="nav('${page}')"]`);
+  if (navEl) navEl.classList.add('active');
+  else document.querySelectorAll('.nav-item')[0].classList.add('active');
+}
+
+function focusCareer(careerName) {
+  state.target = careerName;
+  document.getElementById('gap-career-select').value = careerName;
+  document.getElementById('roadmap-career-select').value = careerName;
+  renderGapAnalysis(careerName);
+  renderRoadmap(careerName);
+  nav('gap');
+}
+
+function updateGapAnalysis() {
+  const career = document.getElementById('gap-career-select').value;
+  state.target = career;
+  renderGapAnalysis(career);
+}
+
+function updateRoadmap() {
+  const career = document.getElementById('roadmap-career-select').value;
+  state.target = career;
+  renderRoadmap(career);
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) readFile(file);
+}
+
+function handleFile(input) {
+  if (input.files[0]) readFile(input.files[0]);
+}
+
+function readFile(file) {
+  const zone = document.getElementById('upload-zone');
+  const box = document.getElementById('resume-text');
+  const name = (file.name || '').toLowerCase();
+
+  // PDF → extract real text with PDF.js (the file is binary, not text)
+  if (name.endsWith('.pdf') || file.type === 'application/pdf') {
+    if (!window.pdfjsLib) {
+      box.value = 'Could not load the PDF reader. Please paste your resume text instead.';
+      return;
+    }
+    box.value = 'Reading PDF…';
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const reader = new FileReader();
+    reader.onload = async e => {
+      try {
+        const pdf = await pdfjsLib.getDocument({ data: e.target.result }).promise;
+        let text = '';
+        for (let p = 1; p <= pdf.numPages; p++) {
+          const page = await pdf.getPage(p);
+          const content = await page.getTextContent();
+          text += content.items.map(it => it.str).join(' ') + '\n';
+        }
+        box.value = text.trim() || 'No text found in this PDF. Try pasting your resume instead.';
+        zone.classList.add('active');
+      } catch (err) {
+        console.error('PDF parse failed:', err);
+        box.value = 'Could not read this PDF. Please paste your resume text instead.';
+      }
+    };
+    reader.readAsArrayBuffer(file);
+    return;
+  }
+
+  // .doc/.docx are not plain text either — guide the user to paste
+  if (name.endsWith('.doc') || name.endsWith('.docx')) {
+    box.value = 'Word files can\'t be read directly in the browser yet — please copy and paste your resume text into this box, or upload a PDF.';
+    return;
+  }
+
+  // Plain text (.txt or anything else) → read as text, as before
+  const reader = new FileReader();
+  reader.onload = e => {
+    box.value = e.target.result;
+    zone.classList.add('active');
+  };
+  reader.readAsText(file);
+}
+
+// Lock nav items until analysis runs
+['matches','gap','roadmap','market'].forEach(p => {
+  const el = document.getElementById(`nav-${p}`);
+  if (el) el.style.opacity = '0.35';
+});
+
+// Load the job-market data, then enable the analyze button.
+const _analyzeBtn = document.querySelector('.analyze-btn');
+if (_analyzeBtn) { _analyzeBtn.disabled = true; _analyzeBtn.textContent = 'Loading data…'; }
+loadData().then(() => {
+  if (_analyzeBtn) { _analyzeBtn.disabled = false; _analyzeBtn.textContent = '⚡ Generate Intelligence Report'; }
+  console.log(`CareerIQ data loaded: ${DATA_STATS.total_careers} careers, ${DATA_STATS.data_driven_careers} data-driven, ${DATA_STATS.total_jobs_analyzed} jobs analyzed.`);
+}).catch(err => {
+  console.error('Failed to load data.json:', err);
+  if (_analyzeBtn) _analyzeBtn.textContent = 'Data failed to load — refresh';
+});
+</script>
+</body>
+</html>

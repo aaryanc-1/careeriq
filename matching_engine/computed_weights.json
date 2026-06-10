@@ -1,0 +1,2204 @@
+{
+  "ML Engineer": {
+    "required": [
+      "machine learning",
+      "python",
+      "generative ai",
+      "deep learning",
+      "azure"
+    ],
+    "important": [
+      "natural language processing",
+      "rag",
+      "prompt engineering",
+      "mlops",
+      "large language models",
+      "llm",
+      "computer vision"
+    ],
+    "nice_to_have": [
+      "google cloud",
+      "ci/cd",
+      "cost optimization"
+    ],
+    "total_jobs_analyzed": 74,
+    "skill_frequencies": {
+      "machine learning": 0.676,
+      "python": 0.149,
+      "generative ai": 0.135,
+      "deep learning": 0.122,
+      "azure": 0.122,
+      "natural language processing": 0.108,
+      "rag": 0.095,
+      "prompt engineering": 0.095,
+      "mlops": 0.068,
+      "large language models": 0.068,
+      "llm": 0.068,
+      "computer vision": 0.068,
+      "google cloud": 0.054,
+      "ci/cd": 0.041,
+      "cost optimization": 0.041,
+      "feature engineering": 0.027,
+      "data structures": 0.027,
+      "databricks": 0.027,
+      "statistics": 0.027,
+      "pandas": 0.027,
+      "mongodb": 0.027,
+      "aws": 0.027,
+      "risk management": 0.014,
+      "sql": 0.014,
+      "mysql": 0.014,
+      "simulation": 0.014,
+      "safety": 0.014,
+      "statistical modeling": 0.014,
+      "crm": 0.014,
+      "recruiting": 0.014,
+      "typescript": 0.014,
+      "signal processing": 0.014,
+      "hugging face": 0.014,
+      "tensorflow": 0.014,
+      "kubernetes": 0.014,
+      "pytorch": 0.014,
+      "airflow": 0.014,
+      "ansible": 0.014,
+      "opencv": 0.014,
+      "docker": 0.014,
+      "devops": 0.014,
+      "github": 0.014,
+      "fine-tuning": 0.014,
+      "forecasting": 0.014
+    }
+  },
+  "AI Engineer": {
+    "required": [
+      "llm",
+      "machine learning",
+      "generative ai",
+      "python",
+      "large language models"
+    ],
+    "important": [
+      "rag",
+      "prompt engineering",
+      "mlops",
+      "azure",
+      "sql",
+      "programming",
+      "databricks"
+    ],
+    "nice_to_have": [
+      "safety",
+      "ci/cd",
+      "aws"
+    ],
+    "total_jobs_analyzed": 52,
+    "skill_frequencies": {
+      "llm": 0.288,
+      "machine learning": 0.25,
+      "generative ai": 0.154,
+      "python": 0.135,
+      "large language models": 0.135,
+      "rag": 0.135,
+      "prompt engineering": 0.096,
+      "mlops": 0.077,
+      "azure": 0.077,
+      "sql": 0.077,
+      "programming": 0.058,
+      "databricks": 0.058,
+      "safety": 0.058,
+      "ci/cd": 0.058,
+      "aws": 0.058,
+      "data structures": 0.038,
+      "hugging face": 0.038,
+      "javascript": 0.038,
+      "typescript": 0.038,
+      "statistics": 0.038,
+      "power bi": 0.038,
+      "angular": 0.038,
+      "devops": 0.038,
+      "scala": 0.038,
+      "agile": 0.038,
+      "rust": 0.038,
+      "google cloud": 0.038,
+      "css": 0.038,
+      "cybersecurity": 0.038,
+      "systems engineering": 0.038,
+      "natural language processing": 0.038,
+      "kubernetes": 0.019,
+      "prototyping": 0.019,
+      "react": 0.019,
+      "java": 0.019,
+      "computer vision": 0.019,
+      "diagnosis": 0.019,
+      "recruiting": 0.019,
+      "budgeting": 0.019,
+      "snowflake": 0.019,
+      "cloud computing": 0.019,
+      "r": 0.019,
+      "supply chain management": 0.019,
+      "valuation": 0.019,
+      "construction management": 0.019,
+      "model deployment": 0.019,
+      "data pipeline": 0.019,
+      "etl": 0.019
+    }
+  },
+  "Software Engineer": {
+    "required": [
+      "java",
+      "generative ai",
+      "machine learning",
+      "aws",
+      "python"
+    ],
+    "important": [
+      "kubernetes",
+      "c++",
+      "cybersecurity",
+      "programming",
+      "azure",
+      "firmware",
+      "devops"
+    ],
+    "nice_to_have": [
+      "ci/cd",
+      "react",
+      "r",
+      "agile",
+      "microservices",
+      "c#",
+      "accessibility",
+      "data analysis"
+    ],
+    "total_jobs_analyzed": 320,
+    "skill_frequencies": {
+      "java": 0.078,
+      "generative ai": 0.062,
+      "machine learning": 0.053,
+      "aws": 0.053,
+      "python": 0.05,
+      "kubernetes": 0.034,
+      "c++": 0.028,
+      "cybersecurity": 0.025,
+      "programming": 0.025,
+      "azure": 0.025,
+      "firmware": 0.025,
+      "devops": 0.022,
+      "ci/cd": 0.022,
+      "react": 0.022,
+      "r": 0.022,
+      "agile": 0.019,
+      "microservices": 0.019,
+      "c#": 0.019,
+      "accessibility": 0.016,
+      "data analysis": 0.016,
+      "linux": 0.016,
+      "deep learning": 0.016,
+      "javascript": 0.016,
+      "go": 0.016,
+      "distributed systems": 0.016,
+      "blockchain": 0.016,
+      "large language models": 0.013,
+      "sql": 0.013,
+      "google cloud": 0.013,
+      "mlops": 0.013,
+      "docker": 0.013,
+      "typescript": 0.013,
+      "recruiting": 0.013,
+      "systems engineering": 0.013,
+      "scala": 0.013,
+      "advertising": 0.009,
+      "product management": 0.009,
+      "github": 0.009,
+      "jenkins": 0.009,
+      "kotlin": 0.009,
+      "data structures": 0.009,
+      "systems integration": 0.006,
+      "mentoring": 0.006,
+      "prototyping": 0.006,
+      "sales": 0.006,
+      "prompt engineering": 0.006,
+      "computer vision": 0.006,
+      "tensorflow": 0.006,
+      "pytorch": 0.006,
+      "airflow": 0.006,
+      "ansible": 0.006,
+      "opencv": 0.006,
+      "natural language processing": 0.006,
+      "rag": 0.006,
+      "gis": 0.006,
+      "html": 0.006,
+      "product development": 0.006,
+      "kafka": 0.006,
+      "web development": 0.006,
+      "xcode": 0.006,
+      "swift": 0.006,
+      "cryptography": 0.006,
+      "project management": 0.003,
+      "usability testing": 0.003,
+      "coaching": 0.003,
+      "signal processing": 0.003,
+      "sap": 0.003,
+      "safety": 0.003,
+      "reinforcement learning": 0.003,
+      "model deployment": 0.003,
+      "cuda": 0.003,
+      "iot": 0.003,
+      "nosql": 0.003,
+      "bash": 0.003,
+      "css": 0.003,
+      "redis": 0.003,
+      "angular": 0.003,
+      "mysql": 0.003,
+      "php": 0.003,
+      "terraform": 0.003,
+      "social media": 0.003,
+      "ruby": 0.003,
+      "git": 0.003,
+      "scrum": 0.003,
+      "embedded systems": 0.003,
+      "mobile development": 0.003,
+      "crm": 0.003,
+      "medical devices": 0.003,
+      "solidity": 0.003,
+      "ethereum": 0.003,
+      "aerospace engineering": 0.003
+    }
+  },
+  "Cybersecurity Engineer": {
+    "required": [
+      "cybersecurity",
+      "business development",
+      "empathy"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 50,
+    "skill_frequencies": {
+      "cybersecurity": 0.46,
+      "business development": 0.1,
+      "empathy": 0.06,
+      "azure": 0.04,
+      "statistics": 0.04,
+      "incident response": 0.04,
+      "risk management": 0.04,
+      "subject matter expertise": 0.02,
+      "penetration testing": 0.02,
+      "incident management": 0.02,
+      "human resources": 0.02,
+      "machine learning": 0.02,
+      "negotiation": 0.02,
+      "kubernetes": 0.02,
+      "terraform": 0.02,
+      "mentoring": 0.02,
+      "ansible": 0.02,
+      "ci/cd": 0.02,
+      "llm": 0.02,
+      "large language models": 0.02,
+      "cloud security": 0.02,
+      "aws": 0.02,
+      "event management": 0.02,
+      "siem": 0.02,
+      "typescript": 0.02,
+      "generative ai": 0.02,
+      "onboarding": 0.02,
+      "procurement": 0.02,
+      "biomedical engineering": 0.02
+    }
+  },
+  "Cloud Architect": {
+    "required": [
+      "aws"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 26,
+    "skill_frequencies": {
+      "aws": 0.192,
+      "machine learning": 0.077,
+      "microservices": 0.077,
+      "risk management": 0.038,
+      "procurement": 0.038,
+      "natural language processing": 0.038,
+      "empathy": 0.038,
+      "ci/cd": 0.038,
+      "c#": 0.038,
+      "generative ai": 0.038,
+      "mentoring": 0.038,
+      "postgresql": 0.038,
+      "node.js": 0.038,
+      "react": 0.038,
+      "agile": 0.038,
+      "java": 0.038,
+      "sql": 0.038,
+      "git": 0.038,
+      "javascript": 0.038,
+      "safety": 0.038,
+      "business development": 0.038,
+      "mlops": 0.038,
+      "erp systems": 0.038,
+      "snowflake": 0.038,
+      "serverless": 0.038,
+      "devops": 0.038,
+      "google cloud": 0.038
+    }
+  },
+  "Aerospace Engineer": {
+    "required": [
+      "safety",
+      "aerospace engineering"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 4,
+    "skill_frequencies": {
+      "safety": 0.75,
+      "aerospace engineering": 0.75,
+      "manufacturing engineering": 0.5,
+      "systems integration": 0.5,
+      "risk management": 0.5,
+      "thermodynamics": 0.5,
+      "hydraulics": 0.5,
+      "calculus": 0.5,
+      "avionics": 0.5
+    }
+  },
+  "Electrical Engineer": {
+    "required": [
+      "electrical engineering",
+      "thermodynamics",
+      "hydraulics",
+      "calculus",
+      "firmware"
+    ],
+    "important": [
+      "manufacturing engineering",
+      "sustainability"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 48,
+    "skill_frequencies": {
+      "electrical engineering": 0.333,
+      "thermodynamics": 0.146,
+      "hydraulics": 0.146,
+      "calculus": 0.146,
+      "firmware": 0.125,
+      "manufacturing engineering": 0.104,
+      "sustainability": 0.062,
+      "simulation": 0.042,
+      "power systems": 0.042,
+      "engineering design": 0.042,
+      "programming": 0.021,
+      "publications": 0.021,
+      "avionics": 0.021,
+      "human resources": 0.021,
+      "cad": 0.021,
+      "project management": 0.021,
+      "signal processing": 0.021,
+      "transformers": 0.021,
+      "r": 0.021,
+      "circuit design": 0.021,
+      "fpga": 0.021,
+      "embedded systems": 0.021,
+      "biomedical engineering": 0.021,
+      "mechanical engineering": 0.021,
+      "supply chain management": 0.021,
+      "procurement": 0.021
+    }
+  },
+  "Accountant": {
+    "required": [
+      "accounting",
+      "auditing",
+      "financial reporting",
+      "valuation",
+      "gaap"
+    ],
+    "important": [
+      "blockchain",
+      "cpa",
+      "human resources",
+      "r",
+      "computer vision"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 145,
+    "skill_frequencies": {
+      "accounting": 0.697,
+      "auditing": 0.193,
+      "financial reporting": 0.152,
+      "valuation": 0.138,
+      "gaap": 0.09,
+      "blockchain": 0.069,
+      "cpa": 0.048,
+      "human resources": 0.021,
+      "r": 0.021,
+      "computer vision": 0.021,
+      "economics": 0.014,
+      "payroll": 0.014,
+      "go": 0.014,
+      "financial analysis": 0.014,
+      "erp systems": 0.014,
+      "excel": 0.014,
+      "recruiting": 0.014,
+      "mentoring": 0.007,
+      "microsoft office": 0.007,
+      "data analysis": 0.007,
+      "sales": 0.007,
+      "technical support": 0.007,
+      "business development": 0.007,
+      "clinical trials": 0.007,
+      "due diligence": 0.007,
+      "sap": 0.007,
+      "sustainability": 0.007,
+      "supply chain management": 0.007,
+      "robotics": 0.007,
+      "agile": 0.007,
+      "forecasting": 0.007,
+      "tax preparation": 0.007,
+      "risk management": 0.007,
+      "budgeting": 0.007
+    }
+  },
+  "Project Manager": {
+    "required": [
+      "project management",
+      "safety",
+      "procurement",
+      "sales",
+      "agile"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 86,
+    "skill_frequencies": {
+      "project management": 0.105,
+      "safety": 0.07,
+      "procurement": 0.047,
+      "sales": 0.035,
+      "agile": 0.035,
+      "stakeholder management": 0.023,
+      "risk management": 0.023,
+      "sustainability": 0.023,
+      "construction management": 0.023,
+      "go": 0.023,
+      "scrum": 0.023,
+      "stakeholder communication": 0.023,
+      "manufacturing engineering": 0.012,
+      "human resources": 0.012,
+      "thermodynamics": 0.012,
+      "programming": 0.012,
+      "hydraulics": 0.012,
+      "calculus": 0.012,
+      "policy development": 0.012,
+      "financial reporting": 0.012,
+      "systems engineering": 0.012,
+      "prototyping": 0.012,
+      "budgeting": 0.012,
+      "mentoring": 0.012,
+      "coaching": 0.012,
+      "generative ai": 0.012,
+      "market research": 0.012,
+      "product development": 0.012,
+      "medical devices": 0.012,
+      "systems integration": 0.012,
+      "html": 0.012,
+      "business intelligence": 0.012,
+      "warehouse management": 0.012,
+      "accounting": 0.012,
+      "branding": 0.012,
+      "renewable energy": 0.012,
+      "sap": 0.012,
+      "erp systems": 0.012
+    }
+  },
+  "Data Scientist": {
+    "required": [
+      "machine learning",
+      "statistics",
+      "r",
+      "statistical modeling",
+      "python"
+    ],
+    "important": [
+      "sql",
+      "economics",
+      "data analysis",
+      "calculus",
+      "programming",
+      "tableau",
+      "large language models"
+    ],
+    "nice_to_have": [
+      "accounting",
+      "forecasting",
+      "generative ai",
+      "safety",
+      "power bi",
+      "natural language processing",
+      "computer vision",
+      "sas"
+    ],
+    "total_jobs_analyzed": 110,
+    "skill_frequencies": {
+      "machine learning": 0.191,
+      "statistics": 0.182,
+      "r": 0.118,
+      "statistical modeling": 0.118,
+      "python": 0.109,
+      "sql": 0.091,
+      "economics": 0.073,
+      "data analysis": 0.064,
+      "calculus": 0.055,
+      "programming": 0.045,
+      "tableau": 0.045,
+      "large language models": 0.045,
+      "accounting": 0.045,
+      "forecasting": 0.045,
+      "generative ai": 0.045,
+      "safety": 0.045,
+      "power bi": 0.036,
+      "natural language processing": 0.036,
+      "computer vision": 0.027,
+      "sas": 0.027,
+      "spark": 0.027,
+      "data visualization": 0.027,
+      "regression": 0.027,
+      "llm": 0.027,
+      "model deployment": 0.027,
+      "clinical trials": 0.027,
+      "agile": 0.018,
+      "java": 0.018,
+      "aws": 0.018,
+      "statistical analysis": 0.018,
+      "usability testing": 0.018,
+      "excel": 0.018,
+      "mentoring": 0.018,
+      "linear algebra": 0.018,
+      "probability": 0.018,
+      "rag": 0.018,
+      "time series": 0.018,
+      "supply chain management": 0.018,
+      "human resources": 0.009,
+      "qlik": 0.009,
+      "fine-tuning": 0.009,
+      "kubernetes": 0.009,
+      "gitlab": 0.009,
+      "ci/cd": 0.009,
+      "scrum": 0.009,
+      "c#": 0.009,
+      "case management": 0.009,
+      "regression analysis": 0.009,
+      "business intelligence": 0.009,
+      "javascript": 0.009,
+      "c++": 0.009,
+      "neural networks": 0.009,
+      "hugging face": 0.009,
+      "transformers": 0.009,
+      "tensorflow": 0.009,
+      "pytorch": 0.009,
+      "git": 0.009,
+      "assembly": 0.009,
+      "coaching": 0.009,
+      "publications": 0.009,
+      "pandas": 0.009,
+      "deep learning": 0.009,
+      "iot": 0.009,
+      "typescript": 0.009,
+      "cost optimization": 0.009,
+      "business development": 0.009,
+      "azure": 0.009,
+      "quantitative analysis": 0.009,
+      "exploratory data analysis": 0.009,
+      "go": 0.009,
+      "clinical research": 0.009,
+      "regulatory submissions": 0.009,
+      "mlops": 0.009
+    }
+  },
+  "Paralegal": {
+    "required": [
+      "paralegal",
+      "legal research",
+      "litigation",
+      "interviewing",
+      "recruiting"
+    ],
+    "important": [
+      "editing",
+      "case management"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 117,
+    "skill_frequencies": {
+      "paralegal": 0.316,
+      "legal research": 0.248,
+      "litigation": 0.222,
+      "interviewing": 0.12,
+      "recruiting": 0.051,
+      "editing": 0.034,
+      "case management": 0.026,
+      "procurement": 0.017,
+      "accounting": 0.017,
+      "powerpoint": 0.017,
+      "technical support": 0.017,
+      "html": 0.009,
+      "publications": 0.009,
+      "r": 0.009,
+      "assembly": 0.009,
+      "contract management": 0.009
+    }
+  },
+  "Registered Nurse": {
+    "required": [
+      "nursing",
+      "patient care",
+      "safety",
+      "rehabilitation",
+      "medication administration"
+    ],
+    "important": [
+      "onboarding",
+      "case management",
+      "physical examination",
+      "quality improvement",
+      "simulation",
+      "human resources",
+      "diagnosis"
+    ],
+    "nice_to_have": [
+      "patient assessment"
+    ],
+    "total_jobs_analyzed": 261,
+    "skill_frequencies": {
+      "nursing": 0.655,
+      "patient care": 0.375,
+      "safety": 0.077,
+      "rehabilitation": 0.057,
+      "medication administration": 0.05,
+      "onboarding": 0.027,
+      "case management": 0.023,
+      "physical examination": 0.019,
+      "quality improvement": 0.015,
+      "simulation": 0.015,
+      "human resources": 0.011,
+      "diagnosis": 0.011,
+      "patient assessment": 0.011,
+      "clinical trials": 0.008,
+      "acls": 0.008,
+      "clinical research": 0.004,
+      "data analysis": 0.004,
+      "six sigma": 0.004,
+      "lean": 0.004,
+      "supervisory experience": 0.004,
+      "contract management": 0.004,
+      "vendor management": 0.004,
+      "project management": 0.004,
+      "computer vision": 0.004,
+      "dcf": 0.004,
+      "r": 0.004,
+      "excel": 0.004,
+      "coaching": 0.004
+    }
+  },
+  "Civil Engineer": {
+    "required": [
+      "thermodynamics",
+      "hydraulics",
+      "calculus",
+      "civil engineering",
+      "manufacturing engineering"
+    ],
+    "important": [
+      "structural engineering",
+      "engineering design",
+      "project management",
+      "safety"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 26,
+    "skill_frequencies": {
+      "thermodynamics": 0.5,
+      "hydraulics": 0.5,
+      "calculus": 0.5,
+      "civil engineering": 0.462,
+      "manufacturing engineering": 0.385,
+      "structural engineering": 0.269,
+      "engineering design": 0.154,
+      "project management": 0.115,
+      "safety": 0.115,
+      "budgeting": 0.077,
+      "environmental engineering": 0.077,
+      "geotechnical": 0.077,
+      "mentoring": 0.038,
+      "coaching": 0.038,
+      "human resources": 0.038,
+      "supervisory experience": 0.038,
+      "economics": 0.038,
+      "cad": 0.038,
+      "signal processing": 0.038,
+      "power systems": 0.038,
+      "r": 0.038,
+      "environmental regulations": 0.038,
+      "instructional design": 0.038,
+      "teaching": 0.038,
+      "programming": 0.038,
+      "procurement": 0.038,
+      "pe license": 0.038
+    }
+  },
+  "Data Engineer": {
+    "required": [
+      "etl",
+      "aws",
+      "google cloud",
+      "snowflake",
+      "machine learning"
+    ],
+    "important": [
+      "data analysis",
+      "databricks",
+      "data warehouse",
+      "power bi",
+      "spark",
+      "devops",
+      "sql"
+    ],
+    "nice_to_have": [
+      "generative ai",
+      "python",
+      "safety",
+      "azure",
+      "programming"
+    ],
+    "total_jobs_analyzed": 110,
+    "skill_frequencies": {
+      "etl": 0.082,
+      "aws": 0.073,
+      "google cloud": 0.064,
+      "snowflake": 0.055,
+      "machine learning": 0.045,
+      "data analysis": 0.045,
+      "databricks": 0.045,
+      "data warehouse": 0.045,
+      "power bi": 0.045,
+      "spark": 0.036,
+      "devops": 0.027,
+      "sql": 0.027,
+      "generative ai": 0.027,
+      "python": 0.027,
+      "safety": 0.027,
+      "azure": 0.027,
+      "programming": 0.027,
+      "nosql": 0.018,
+      "data structures": 0.018,
+      "data warehousing": 0.018,
+      "sap": 0.018,
+      "scala": 0.018,
+      "kafka": 0.018,
+      "java": 0.018,
+      "excel": 0.018,
+      "data visualization": 0.018,
+      "looker": 0.018,
+      "data pipeline": 0.018,
+      "agile": 0.018,
+      "technical support": 0.009,
+      "mentoring": 0.009,
+      "llm": 0.009,
+      "crm": 0.009,
+      "airflow": 0.009,
+      "large language models": 0.009,
+      "typescript": 0.009,
+      "accessibility": 0.009,
+      "rest api": 0.009,
+      "business analysis": 0.009,
+      "iot": 0.009,
+      "data modeling": 0.009,
+      "erp systems": 0.009,
+      "case management": 0.009,
+      "data lake": 0.009,
+      "lambda": 0.009,
+      "ehr systems": 0.009,
+      "financial modeling": 0.009,
+      "business intelligence": 0.009,
+      "sales": 0.009,
+      "hris systems": 0.009,
+      "postgresql": 0.009,
+      "ci/cd": 0.009,
+      "hadoop": 0.009,
+      "forecasting": 0.009,
+      "performance management": 0.009
+    }
+  },
+  "Mechanical Engineer": {
+    "required": [
+      "mechanical engineering",
+      "thermodynamics",
+      "hydraulics",
+      "calculus",
+      "safety"
+    ],
+    "important": [
+      "manufacturing engineering",
+      "project management"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 30,
+    "skill_frequencies": {
+      "mechanical engineering": 0.267,
+      "thermodynamics": 0.233,
+      "hydraulics": 0.2,
+      "calculus": 0.2,
+      "safety": 0.133,
+      "manufacturing engineering": 0.133,
+      "project management": 0.1,
+      "r": 0.067,
+      "product development": 0.067,
+      "structural analysis": 0.033,
+      "cad": 0.033,
+      "signal processing": 0.033,
+      "power systems": 0.033,
+      "technical support": 0.033,
+      "structural engineering": 0.033,
+      "engineering design": 0.033,
+      "electrical engineering": 0.033,
+      "renewable energy": 0.033,
+      "budgeting": 0.033,
+      "rehabilitation": 0.033,
+      "contract management": 0.033,
+      "pe license": 0.033,
+      "supply chain management": 0.033,
+      "networking": 0.033,
+      "aws": 0.033,
+      "medical devices": 0.033,
+      "recruiting": 0.033,
+      "robotics": 0.033,
+      "sustainability": 0.033
+    }
+  },
+  "Management Consultant": {
+    "required": [
+      "medical devices",
+      "sales",
+      "safety",
+      "sql",
+      "sap"
+    ],
+    "important": [
+      "recruiting",
+      "subject matter expertise",
+      "business development",
+      "generative ai",
+      "mlops",
+      "r"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 231,
+    "skill_frequencies": {
+      "medical devices": 0.043,
+      "sales": 0.022,
+      "safety": 0.017,
+      "sql": 0.017,
+      "sap": 0.017,
+      "recruiting": 0.017,
+      "subject matter expertise": 0.017,
+      "business development": 0.013,
+      "generative ai": 0.013,
+      "mlops": 0.013,
+      "r": 0.013,
+      "cybersecurity": 0.009,
+      "risk management": 0.009,
+      "tableau": 0.009,
+      "requirements gathering": 0.009,
+      "human resources": 0.009,
+      "hris systems": 0.009,
+      "accounting": 0.009,
+      "supply chain management": 0.009,
+      "quality improvement": 0.004,
+      "patient care": 0.004,
+      "nursing": 0.004,
+      "physical examination": 0.004,
+      "dcf": 0.004,
+      "valuation": 0.004,
+      "programming": 0.004,
+      "node.js": 0.004,
+      "java": 0.004,
+      "computer vision": 0.004,
+      "aws": 0.004,
+      "negotiation": 0.004,
+      "talent acquisition": 0.004,
+      "financial reporting": 0.004,
+      "statistical modeling": 0.004,
+      "advertising": 0.004,
+      "economics": 0.004,
+      "project management": 0.004,
+      "stakeholder management": 0.004,
+      "warehouse management": 0.004,
+      "powerpoint": 0.004
+    }
+  },
+  "Structural Engineer": {
+    "required": [
+      "structural engineering"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 32,
+    "skill_frequencies": {
+      "structural engineering": 0.25,
+      "networking": 0.062,
+      "programming": 0.031,
+      "structural analysis": 0.031,
+      "rehabilitation": 0.031,
+      "engineering design": 0.031,
+      "project management": 0.031,
+      "autocad": 0.031,
+      "revit": 0.031,
+      "social media": 0.031
+    }
+  },
+  "Environmental Engineer": {
+    "required": [
+      "manufacturing engineering",
+      "thermodynamics",
+      "hydraulics",
+      "calculus"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 10,
+    "skill_frequencies": {
+      "manufacturing engineering": 0.3,
+      "thermodynamics": 0.3,
+      "hydraulics": 0.3,
+      "calculus": 0.3,
+      "sustainability": 0.2,
+      "environmental engineering": 0.2,
+      "coaching": 0.2,
+      "budgeting": 0.1,
+      "environmental compliance": 0.1,
+      "safety": 0.1,
+      "project management": 0.1,
+      "mentoring": 0.1
+    }
+  },
+  "Policy Analyst": {
+    "required": [
+      "policy development",
+      "human resources"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 21,
+    "skill_frequencies": {
+      "policy development": 0.286,
+      "human resources": 0.143,
+      "negotiation": 0.095,
+      "technical writing": 0.095,
+      "cybersecurity": 0.048,
+      "systems engineering": 0.048
+    }
+  },
+  "Human Resources Manager": {
+    "required": [
+      "human resources",
+      "employee relations",
+      "safety",
+      "performance management",
+      "payroll"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 35,
+    "skill_frequencies": {
+      "human resources": 0.629,
+      "employee relations": 0.171,
+      "safety": 0.114,
+      "performance management": 0.086,
+      "payroll": 0.086,
+      "talent acquisition": 0.057,
+      "counseling": 0.057,
+      "powerpoint": 0.029,
+      "excel": 0.029,
+      "networking": 0.029,
+      "forecasting": 0.029,
+      "facilitation": 0.029,
+      "legal research": 0.029,
+      "sql": 0.029,
+      "policy development": 0.029,
+      "publications": 0.029,
+      "mentoring": 0.029
+    }
+  },
+  "Financial Analyst": {
+    "required": [
+      "forecasting",
+      "financial analysis",
+      "accounting",
+      "financial reporting",
+      "budgeting"
+    ],
+    "important": [
+      "economics",
+      "financial modeling"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 58,
+    "skill_frequencies": {
+      "forecasting": 0.172,
+      "financial analysis": 0.121,
+      "accounting": 0.103,
+      "financial reporting": 0.103,
+      "budgeting": 0.086,
+      "economics": 0.052,
+      "financial modeling": 0.052,
+      "recruiting": 0.034,
+      "process design": 0.034,
+      "ats": 0.034,
+      "sales": 0.034,
+      "data modeling": 0.017,
+      "statistics": 0.017,
+      "quantitative analysis": 0.017,
+      "tableau": 0.017,
+      "excel": 0.017,
+      "sql": 0.017,
+      "gaap": 0.017,
+      "deal structuring": 0.017,
+      "due diligence": 0.017,
+      "valuation": 0.017,
+      "dcf": 0.017,
+      "project management": 0.017,
+      "healthcare policy": 0.017,
+      "r": 0.017,
+      "sustainability": 0.017,
+      "litigation": 0.017,
+      "product development": 0.017,
+      "procurement": 0.017,
+      "auditing": 0.017
+    }
+  },
+  "Full Stack Engineer": {
+    "required": [
+      "java",
+      "react",
+      "angular",
+      "programming",
+      "sql"
+    ],
+    "important": [
+      "javascript",
+      "microservices",
+      "node.js",
+      "postgresql",
+      "agile",
+      "aws",
+      "c#"
+    ],
+    "nice_to_have": [
+      "git",
+      "azure",
+      "ci/cd",
+      "typescript",
+      "python",
+      "go",
+      "data warehouse",
+      "erp systems"
+    ],
+    "total_jobs_analyzed": 85,
+    "skill_frequencies": {
+      "java": 0.235,
+      "react": 0.176,
+      "angular": 0.153,
+      "programming": 0.141,
+      "sql": 0.129,
+      "javascript": 0.106,
+      "microservices": 0.082,
+      "node.js": 0.071,
+      "postgresql": 0.059,
+      "agile": 0.059,
+      "aws": 0.059,
+      "c#": 0.059,
+      "git": 0.047,
+      "azure": 0.047,
+      "ci/cd": 0.047,
+      "typescript": 0.047,
+      "python": 0.047,
+      "go": 0.035,
+      "data warehouse": 0.035,
+      "erp systems": 0.035,
+      "nosql": 0.024,
+      "accessibility": 0.024,
+      "mongodb": 0.024,
+      "machine learning": 0.024,
+      "web development": 0.024,
+      "vue": 0.024,
+      "devops": 0.024,
+      "kubernetes": 0.024,
+      "docker": 0.024,
+      "mysql": 0.024,
+      "generative ai": 0.024,
+      "css": 0.012,
+      "distributed systems": 0.012,
+      "onboarding": 0.012,
+      "safety": 0.012,
+      "robotics": 0.012,
+      "jenkins": 0.012,
+      "github": 0.012,
+      "contract management": 0.012,
+      "rest api": 0.012,
+      "llm": 0.012,
+      "lambda": 0.012,
+      "react native": 0.012
+    }
+  },
+  "Attorney": {
+    "required": [
+      "litigation",
+      "legal research",
+      "computer vision"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 55,
+    "skill_frequencies": {
+      "litigation": 0.364,
+      "legal research": 0.2,
+      "computer vision": 0.109,
+      "procurement": 0.036,
+      "deal structuring": 0.036,
+      "bar admission": 0.036,
+      "digital marketing": 0.036,
+      "seo": 0.036,
+      "cybersecurity": 0.018,
+      "publications": 0.018,
+      "editing": 0.018,
+      "social media": 0.018,
+      "advertising": 0.018,
+      "sales": 0.018,
+      "trial experience": 0.018,
+      "legal writing": 0.018,
+      "negotiation": 0.018
+    }
+  },
+  "Biomedical Engineer": {
+    "required": [
+      "biomedical engineering",
+      "safety",
+      "mechanical engineering",
+      "electrical engineering",
+      "project management"
+    ],
+    "important": [
+      "medical devices",
+      "networking"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 5,
+    "skill_frequencies": {
+      "biomedical engineering": 0.8,
+      "safety": 0.8,
+      "mechanical engineering": 0.6,
+      "electrical engineering": 0.6,
+      "project management": 0.6,
+      "medical devices": 0.6,
+      "networking": 0.6
+    }
+  },
+  "Mental Health Counselor": {
+    "required": [
+      "counseling",
+      "rehabilitation",
+      "psychotherapy",
+      "diagnosis",
+      "case management"
+    ],
+    "important": [
+      "nursing",
+      "treatment planning",
+      "crisis intervention",
+      "safety",
+      "interviewing",
+      "specialty certifications",
+      "vba"
+    ],
+    "nice_to_have": [
+      "programming",
+      "patient care",
+      "accounting",
+      "payroll",
+      "negotiation"
+    ],
+    "total_jobs_analyzed": 116,
+    "skill_frequencies": {
+      "counseling": 0.448,
+      "rehabilitation": 0.267,
+      "psychotherapy": 0.172,
+      "diagnosis": 0.164,
+      "case management": 0.155,
+      "nursing": 0.103,
+      "treatment planning": 0.095,
+      "crisis intervention": 0.086,
+      "safety": 0.052,
+      "interviewing": 0.043,
+      "specialty certifications": 0.043,
+      "vba": 0.043,
+      "programming": 0.034,
+      "patient care": 0.034,
+      "accounting": 0.034,
+      "payroll": 0.034,
+      "negotiation": 0.026,
+      "trauma-informed care": 0.017,
+      "microsoft office": 0.017,
+      "supervisory experience": 0.017,
+      "curriculum development": 0.017,
+      "teaching": 0.017,
+      "group therapy": 0.017,
+      "statistics": 0.009,
+      "cbt": 0.009,
+      "dbt": 0.009,
+      "machine learning": 0.009,
+      "hr policy": 0.009,
+      "coaching": 0.009,
+      "onboarding": 0.009,
+      "medication administration": 0.009,
+      "php": 0.009,
+      "recruiting": 0.009,
+      "physical therapy": 0.009,
+      "r": 0.009,
+      "sales": 0.009,
+      "blockchain": 0.009
+    }
+  },
+  "Supply Chain Manager": {
+    "required": [
+      "supply chain management",
+      "risk management"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 13,
+    "skill_frequencies": {
+      "supply chain management": 0.385,
+      "risk management": 0.231,
+      "typescript": 0.154,
+      "project management": 0.077,
+      "sql": 0.077,
+      "procurement": 0.077,
+      "six sigma": 0.077,
+      "erp systems": 0.077
+    }
+  },
+  "Risk Analyst": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 21,
+    "skill_frequencies": {
+      "risk management": 0.095,
+      "microsoft office": 0.048,
+      "data analysis": 0.048,
+      "powerpoint": 0.048,
+      "excel": 0.048,
+      "sales": 0.048,
+      "project management": 0.048
+    }
+  },
+  "Physical Therapist": {
+    "required": [
+      "physical therapy",
+      "rehabilitation",
+      "special education",
+      "nursing",
+      "patient care"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 92,
+    "skill_frequencies": {
+      "physical therapy": 0.207,
+      "rehabilitation": 0.185,
+      "special education": 0.087,
+      "nursing": 0.054,
+      "patient care": 0.043,
+      "programming": 0.022,
+      "diagnosis": 0.022,
+      "dry needling": 0.011,
+      "safety": 0.011,
+      "policy development": 0.011,
+      "group therapy": 0.011,
+      "treatment planning": 0.011,
+      "go": 0.011,
+      "php": 0.011
+    }
+  },
+  "Operations Manager": {
+    "required": [
+      "safety"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 19,
+    "skill_frequencies": {
+      "safety": 0.158,
+      "supply chain management": 0.053,
+      "supervisory experience": 0.053,
+      "budgeting": 0.053,
+      "payroll": 0.053,
+      "incident management": 0.053,
+      "cybersecurity": 0.053,
+      "aws": 0.053,
+      "typescript": 0.053,
+      "accounting": 0.053,
+      "recruiting": 0.053,
+      "fundraising": 0.053,
+      "budget management": 0.053,
+      "social media": 0.053
+    }
+  },
+  "Business Analyst": {
+    "required": [
+      "business analysis",
+      "clinical trials",
+      "sql",
+      "agile"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 72,
+    "skill_frequencies": {
+      "business analysis": 0.097,
+      "clinical trials": 0.083,
+      "sql": 0.069,
+      "agile": 0.069,
+      "supply chain management": 0.028,
+      "accounting": 0.028,
+      "requirements gathering": 0.028,
+      "onboarding": 0.028,
+      "valuation": 0.014,
+      "sales": 0.014,
+      "azure": 0.014,
+      "business intelligence": 0.014,
+      "data warehouse": 0.014,
+      "performance management": 0.014,
+      "data analysis": 0.014,
+      "product management": 0.014,
+      "excel": 0.014,
+      "scrum": 0.014,
+      "go": 0.014,
+      "swift": 0.014,
+      "safety": 0.014
+    }
+  },
+  "Product Manager": {
+    "required": [
+      "product development",
+      "product management",
+      "aws"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 70,
+    "skill_frequencies": {
+      "product development": 0.043,
+      "product management": 0.043,
+      "aws": 0.043,
+      "agile": 0.029,
+      "project management": 0.029,
+      "programming": 0.029,
+      "machine learning": 0.014,
+      "generative ai": 0.014,
+      "sql": 0.014,
+      "distributed systems": 0.014,
+      "equity research": 0.014,
+      "google analytics": 0.014,
+      "roadmapping": 0.014,
+      "a/b testing": 0.014,
+      "human resources": 0.014
+    }
+  },
+  "Physician Assistant": {
+    "required": [
+      "patient care",
+      "clinical knowledge"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 10,
+    "skill_frequencies": {
+      "patient care": 0.9,
+      "clinical knowledge": 0.7,
+      "case management": 0.1,
+      "treatment planning": 0.1,
+      "diagnosis": 0.1
+    }
+  },
+  "Pharmacist": {
+    "required": [
+      "patient care",
+      "counseling",
+      "human resources"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 37,
+    "skill_frequencies": {
+      "patient care": 0.189,
+      "counseling": 0.108,
+      "human resources": 0.081,
+      "drug interactions": 0.054,
+      "computer vision": 0.027,
+      "supervisory experience": 0.027,
+      "physical examination": 0.027,
+      "quality improvement": 0.027,
+      "diagnosis": 0.027,
+      "patient counseling": 0.027,
+      "safety": 0.027,
+      "mtm": 0.027
+    }
+  },
+  "Digital Marketing Manager": {
+    "required": [
+      "digital marketing",
+      "seo",
+      "social media"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 39,
+    "skill_frequencies": {
+      "digital marketing": 0.256,
+      "seo": 0.128,
+      "social media": 0.103,
+      "marketing automation": 0.051,
+      "marketing strategy": 0.051,
+      "sales": 0.051,
+      "crm": 0.026,
+      "data lake": 0.026,
+      "agile": 0.026,
+      "advertising": 0.026,
+      "project management": 0.026,
+      "supply chain management": 0.026,
+      "keyword research": 0.026,
+      "sap": 0.026,
+      "content marketing": 0.026,
+      "sem": 0.026,
+      "email marketing": 0.026,
+      "public relations": 0.026,
+      "recruiting": 0.026
+    }
+  },
+  "Chemical Engineer": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 4,
+    "skill_frequencies": {
+      "thermodynamics": 0.5,
+      "safety": 0.5,
+      "chemical engineering": 0.25,
+      "manufacturing engineering": 0.25,
+      "hydraulics": 0.25,
+      "calculus": 0.25
+    }
+  },
+  "K-12 Teacher": {
+    "required": [
+      "teaching",
+      "special education"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 61,
+    "skill_frequencies": {
+      "teaching": 0.426,
+      "special education": 0.377,
+      "diagnosis": 0.033,
+      "statistics": 0.016,
+      "accounting": 0.016,
+      "calculus": 0.016,
+      "curriculum development": 0.016,
+      "coaching": 0.016,
+      "programming": 0.016
+    }
+  },
+  "University Professor": {
+    "required": [
+      "teaching",
+      "mechanical engineering",
+      "electrical engineering",
+      "patient care"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 36,
+    "skill_frequencies": {
+      "teaching": 0.278,
+      "mechanical engineering": 0.083,
+      "electrical engineering": 0.083,
+      "patient care": 0.083,
+      "aerospace engineering": 0.056,
+      "systems engineering": 0.056,
+      "systems integration": 0.056,
+      "budgeting": 0.056,
+      "supply chain management": 0.056,
+      "statistics": 0.056,
+      "mentoring": 0.056,
+      "recruiting": 0.056,
+      "curriculum development": 0.028,
+      "computer vision": 0.028,
+      "economics": 0.028,
+      "simulation": 0.028,
+      "safety": 0.028,
+      "go": 0.028,
+      "pharmacology": 0.028,
+      "quality improvement": 0.028,
+      "entrepreneurship": 0.028,
+      "sustainability": 0.028,
+      "bloomberg": 0.028,
+      "programming": 0.028,
+      "risk management": 0.028,
+      "clinical research": 0.028,
+      "clinical trials": 0.028
+    }
+  },
+  "DevOps Engineer": {
+    "required": [
+      "devops",
+      "ci/cd",
+      "azure",
+      "aws",
+      "github"
+    ],
+    "important": [
+      "linux",
+      "jenkins",
+      "infrastructure as code",
+      "gitlab"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 41,
+    "skill_frequencies": {
+      "devops": 0.78,
+      "ci/cd": 0.39,
+      "azure": 0.293,
+      "aws": 0.195,
+      "github": 0.098,
+      "linux": 0.098,
+      "jenkins": 0.098,
+      "infrastructure as code": 0.073,
+      "gitlab": 0.073,
+      "snowflake": 0.049,
+      "machine learning": 0.049,
+      "agile": 0.049,
+      "scripting": 0.049,
+      "git": 0.049,
+      "terraform": 0.049,
+      "kubernetes": 0.049,
+      "google cloud": 0.049,
+      "python": 0.024,
+      "procurement": 0.024,
+      "docker": 0.024,
+      "crm": 0.024,
+      "sales": 0.024,
+      "networking": 0.024,
+      "sap": 0.024,
+      "cloud computing": 0.024,
+      "onboarding": 0.024,
+      "data lake": 0.024,
+      "iot": 0.024,
+      "ansible": 0.024,
+      "kafka": 0.024
+    }
+  },
+  "Compliance Officer": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 2,
+    "skill_frequencies": {
+      "r": 0.5
+    }
+  },
+  "NLP Engineer": {
+    "required": [
+      "natural language processing"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 7,
+    "skill_frequencies": {
+      "natural language processing": 0.429,
+      "machine learning": 0.286,
+      "generative ai": 0.143
+    }
+  },
+  "Quantitative Analyst": {
+    "required": [
+      "data modeling",
+      "risk management"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 57,
+    "skill_frequencies": {
+      "data modeling": 0.088,
+      "risk management": 0.07,
+      "portfolio management": 0.035,
+      "machine learning": 0.018,
+      "sales": 0.018,
+      "gaap": 0.018,
+      "quantitative analysis": 0.018,
+      "project management": 0.018,
+      "go": 0.018,
+      "statistical analysis": 0.018,
+      "python": 0.018,
+      "teaching": 0.018,
+      "forecasting": 0.018,
+      "pharmacology": 0.018
+    }
+  },
+  "Research Scientist (AI)": {
+    "required": [
+      "computer vision"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 46,
+    "skill_frequencies": {
+      "computer vision": 0.196,
+      "clinical research": 0.043,
+      "medical devices": 0.043,
+      "r": 0.022,
+      "nursing": 0.022,
+      "publications": 0.022,
+      "clinical trials": 0.022,
+      "safety": 0.022,
+      "quality control": 0.022,
+      "natural language processing": 0.022,
+      "electrical engineering": 0.022,
+      "machine learning": 0.022,
+      "programming": 0.022
+    }
+  },
+  "Business Intelligence Developer": {
+    "required": [
+      "business intelligence",
+      "power bi",
+      "sql",
+      "sales",
+      "databricks"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 24,
+    "skill_frequencies": {
+      "business intelligence": 0.583,
+      "power bi": 0.292,
+      "sql": 0.25,
+      "sales": 0.167,
+      "databricks": 0.125,
+      "etl": 0.083,
+      "project management": 0.083,
+      "git": 0.083,
+      "data analysis": 0.083,
+      "sap": 0.042,
+      "safety": 0.042,
+      "excel": 0.042,
+      "r": 0.042,
+      "data visualization": 0.042,
+      "programming": 0.042,
+      "python": 0.042,
+      "devops": 0.042,
+      "human resources": 0.042
+    }
+  },
+  "Frontend Engineer": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 9,
+    "skill_frequencies": {
+      "distributed systems": 0.222,
+      "smart contracts": 0.222,
+      "ethereum": 0.222,
+      "web3": 0.222,
+      "typescript": 0.111,
+      "react": 0.111,
+      "erp systems": 0.111,
+      "javascript": 0.111,
+      "valuation": 0.111
+    }
+  },
+  "UX Designer": {
+    "required": [
+      "user research",
+      "graphic design"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 26,
+    "skill_frequencies": {
+      "user research": 0.308,
+      "graphic design": 0.115,
+      "usability testing": 0.077,
+      "mentoring": 0.077,
+      "go": 0.038,
+      "prototyping": 0.038,
+      "generative ai": 0.038,
+      "accessibility": 0.038,
+      "ui design": 0.038,
+      "onboarding": 0.038,
+      "ux design": 0.038,
+      "agile": 0.038,
+      "scrum": 0.038,
+      "figma": 0.038,
+      "web design": 0.038,
+      "excel": 0.038
+    }
+  },
+  "Analytics Engineer": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 15,
+    "skill_frequencies": {
+      "sql": 0.133,
+      "business intelligence": 0.133,
+      "blockchain": 0.133,
+      "cost optimization": 0.067,
+      "snowflake": 0.067,
+      "tableau": 0.067,
+      "dbt": 0.067,
+      "risk management": 0.067,
+      "google analytics": 0.067
+    }
+  },
+  "Clinical Data Analyst": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 32,
+    "skill_frequencies": {
+      "clinical research": 0.062,
+      "anatomy": 0.062,
+      "sas": 0.031,
+      "quality improvement": 0.031
+    }
+  },
+  "Data Analyst": {
+    "required": [
+      "sql",
+      "safety",
+      "sales",
+      "etl",
+      "clinical research"
+    ],
+    "important": [
+      "data analysis"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 61,
+    "skill_frequencies": {
+      "sql": 0.082,
+      "safety": 0.082,
+      "sales": 0.082,
+      "etl": 0.066,
+      "clinical research": 0.049,
+      "data analysis": 0.049,
+      "case management": 0.033,
+      "statistical analysis": 0.033,
+      "performance management": 0.033,
+      "data warehouse": 0.033,
+      "ehr systems": 0.016,
+      "r": 0.016,
+      "generative ai": 0.016,
+      "patient care": 0.016,
+      "usability testing": 0.016,
+      "hris systems": 0.016,
+      "power bi": 0.016,
+      "azure": 0.016,
+      "supply chain management": 0.016,
+      "onboarding": 0.016,
+      "tableau": 0.016,
+      "statistics": 0.016,
+      "accounting": 0.016,
+      "auditing": 0.016,
+      "data warehousing": 0.016,
+      "user research": 0.016
+    }
+  },
+  "Contract Manager": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 1,
+    "skill_frequencies": {
+      "supply chain management": 1.0
+    }
+  },
+  "Product Analyst": {
+    "required": [
+      "project management",
+      "generative ai",
+      "budgeting",
+      "machine learning",
+      "r"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 8,
+    "skill_frequencies": {
+      "project management": 0.5,
+      "generative ai": 0.5,
+      "budgeting": 0.5,
+      "machine learning": 0.5,
+      "r": 0.5,
+      "economics": 0.125
+    }
+  },
+  "Mobile Engineer": {
+    "required": [
+      "swift"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 19,
+    "skill_frequencies": {
+      "swift": 0.368,
+      "kotlin": 0.105,
+      "agile": 0.105,
+      "stakeholder management": 0.053,
+      "xcode": 0.053,
+      "microservices": 0.053,
+      "react": 0.053,
+      "java": 0.053,
+      "javascript": 0.053,
+      "git": 0.053
+    }
+  },
+  "Backend Engineer": {
+    "required": [
+      "java",
+      "devops",
+      "aws",
+      "ci/cd"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 10,
+    "skill_frequencies": {
+      "java": 0.4,
+      "devops": 0.3,
+      "aws": 0.3,
+      "ci/cd": 0.3,
+      "python": 0.2,
+      "agile": 0.2,
+      "kotlin": 0.1,
+      "postgresql": 0.1,
+      "microservices": 0.1,
+      "kafka": 0.1
+    }
+  },
+  "Recruiter": {
+    "required": [
+      "recruiting"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 19,
+    "skill_frequencies": {
+      "recruiting": 0.579,
+      "onboarding": 0.053,
+      "agile": 0.053,
+      "talent acquisition": 0.053,
+      "cloud computing": 0.053,
+      "aws": 0.053
+    }
+  },
+  "Site Reliability Engineer": {
+    "required": [
+      "devops",
+      "kubernetes",
+      "terraform",
+      "aws",
+      "linux"
+    ],
+    "important": [
+      "agile",
+      "python",
+      "gis"
+    ],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 33,
+    "skill_frequencies": {
+      "devops": 0.152,
+      "kubernetes": 0.152,
+      "terraform": 0.121,
+      "aws": 0.121,
+      "linux": 0.091,
+      "agile": 0.091,
+      "python": 0.091,
+      "gis": 0.091,
+      "scripting": 0.061,
+      "mongodb": 0.061,
+      "azure": 0.061,
+      "data lake": 0.061,
+      "incident management": 0.03,
+      "github": 0.03,
+      "ci/cd": 0.03,
+      "prometheus": 0.03,
+      "ansible": 0.03,
+      "grafana": 0.03,
+      "docker": 0.03,
+      "java": 0.03,
+      "unix": 0.03,
+      "go": 0.03,
+      "machine learning": 0.03,
+      "bash": 0.03
+    }
+  },
+  "Embedded Systems Engineer": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 11,
+    "skill_frequencies": {
+      "agile": 0.182,
+      "embedded systems": 0.182,
+      "go": 0.182,
+      "networking": 0.091,
+      "matlab": 0.091,
+      "prototyping": 0.091,
+      "typescript": 0.091,
+      "systems engineering": 0.091
+    }
+  },
+  "Actuary": {
+    "required": [
+      "technical support"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 21,
+    "skill_frequencies": {
+      "technical support": 0.238,
+      "risk management": 0.095,
+      "forecasting": 0.095,
+      "go": 0.048,
+      "safety": 0.048,
+      "subject matter expertise": 0.048,
+      "statistical modeling": 0.048
+    }
+  },
+  "Blockchain Developer": {
+    "required": [
+      "blockchain",
+      "java"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 8,
+    "skill_frequencies": {
+      "blockchain": 0.625,
+      "java": 0.5,
+      "go": 0.25,
+      "web3": 0.125,
+      "distributed systems": 0.125,
+      "smart contracts": 0.125,
+      "microservices": 0.125,
+      "cryptography": 0.125,
+      "rust": 0.125,
+      "programming": 0.125,
+      "python": 0.125
+    }
+  },
+  "Investment Banker": {
+    "required": [
+      "sales",
+      "deal structuring"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 35,
+    "skill_frequencies": {
+      "sales": 0.086,
+      "deal structuring": 0.086,
+      "valuation": 0.057,
+      "mentoring": 0.029,
+      "financial analysis": 0.029,
+      "risk management": 0.029,
+      "teaching": 0.029
+    }
+  },
+  "Investment Analyst (Buy-Side)": {
+    "required": [
+      "equity research",
+      "financial modeling",
+      "valuation"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 12,
+    "skill_frequencies": {
+      "equity research": 0.333,
+      "financial modeling": 0.25,
+      "valuation": 0.25,
+      "mentoring": 0.083
+    }
+  },
+  "Corporate Finance Manager": {
+    "required": [
+      "financial analysis"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 12,
+    "skill_frequencies": {
+      "financial analysis": 0.333,
+      "accounting": 0.167,
+      "risk management": 0.083,
+      "economics": 0.083,
+      "sap": 0.083
+    }
+  },
+  "Manufacturing Engineer": {
+    "required": [
+      "manufacturing engineering"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 16,
+    "skill_frequencies": {
+      "manufacturing engineering": 0.188,
+      "inventory management": 0.062,
+      "sap": 0.062
+    }
+  },
+  "Graphic Designer": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 17,
+    "skill_frequencies": {
+      "adobe illustrator": 0.118,
+      "adobe photoshop": 0.118,
+      "graphic design": 0.118,
+      "motion graphics": 0.059,
+      "typescript": 0.059,
+      "html": 0.059,
+      "branding": 0.059,
+      "indesign": 0.059,
+      "web design": 0.059
+    }
+  },
+  "Content Strategist": {
+    "required": [
+      "machine learning",
+      "social media",
+      "aws"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 29,
+    "skill_frequencies": {
+      "machine learning": 0.172,
+      "social media": 0.138,
+      "aws": 0.103,
+      "excel": 0.069,
+      "mentoring": 0.034,
+      "cybersecurity": 0.034,
+      "content strategy": 0.034
+    }
+  },
+  "SEO Specialist": {
+    "required": [
+      "seo",
+      "technical seo",
+      "digital marketing"
+    ],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 34,
+    "skill_frequencies": {
+      "seo": 0.735,
+      "technical seo": 0.147,
+      "digital marketing": 0.147,
+      "keyword research": 0.059,
+      "advertising": 0.059,
+      "content strategy": 0.059,
+      "copywriting": 0.059,
+      "sales": 0.059,
+      "programming": 0.029,
+      "machine learning": 0.029,
+      "hris systems": 0.029,
+      "large language models": 0.029,
+      "google analytics": 0.029,
+      "semrush": 0.029,
+      "ahrefs": 0.029,
+      "auditing": 0.029,
+      "lean": 0.029
+    }
+  },
+  "Copywriter": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 8,
+    "skill_frequencies": {
+      "sales": 0.125,
+      "seo": 0.125,
+      "brand voice": 0.125,
+      "copywriting": 0.125,
+      "go": 0.125
+    }
+  },
+  "Video Producer": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 2,
+    "skill_frequencies": {
+      "motion graphics": 0.5,
+      "3d animation": 0.5,
+      "advertising": 0.5
+    }
+  },
+  "Instructional Designer": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 4,
+    "skill_frequencies": {
+      "curriculum development": 0.25,
+      "instructional design": 0.25,
+      "human resources": 0.25,
+      "safety": 0.25,
+      "e-learning": 0.25
+    }
+  },
+  "Corporate Trainer": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 10,
+    "skill_frequencies": {
+      "rehabilitation": 0.1,
+      "php": 0.1,
+      "teaching": 0.1,
+      "instructional design": 0.1,
+      "facilitation": 0.1,
+      "onboarding": 0.1,
+      "sales": 0.1,
+      "spark": 0.1
+    }
+  },
+  "Logistics Manager": {
+    "required": [],
+    "important": [],
+    "nice_to_have": [],
+    "total_jobs_analyzed": 1,
+    "skill_frequencies": {
+      "safety": 1.0
+    }
+  }
+}
