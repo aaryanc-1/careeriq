@@ -213,6 +213,7 @@
   .empty-state { text-align: center; padding: 60px; color: var(--muted); font-size: 14px; }
   .empty-icon { font-size: 40px; margin-bottom: 12px; }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 <div class="shell">
@@ -335,80 +336,84 @@
 <script>
 // ── Platform Data ─────────────────────────────────────────────────────────────
 
-const CAREER_PATHS = {
-  "Data Analyst": { salary: 78000, growth: "+18%", required: ["sql","excel","data visualization","data analysis"], important: ["python","tableau","power bi","statistics"], nice: ["r","machine learning","looker","a/b testing"] },
-  "Business Analyst": { salary: 82000, growth: "+14%", required: ["sql","excel","business analysis","data analysis"], important: ["tableau","power bi","statistics","project management"], nice: ["python","agile","financial modeling","r"] },
-  "Data Scientist": { salary: 115000, growth: "+35%", required: ["python","machine learning","statistics","sql"], important: ["pandas","numpy","scikit-learn","data visualization"], nice: ["deep learning","tensorflow","pytorch","aws","spark"] },
-  "ML Engineer": { salary: 130000, growth: "+42%", required: ["python","machine learning","deep learning","sql"], important: ["tensorflow","pytorch","docker","aws","git"], nice: ["kubernetes","spark","mlops","scala","kafka"] },
-  "Data Engineer": { salary: 118000, growth: "+30%", required: ["python","sql","etl","data pipeline"], important: ["spark","airflow","aws","postgresql","docker"], nice: ["kafka","dbt","snowflake","databricks","scala"] },
-  "Software Engineer": { salary: 110000, growth: "+25%", required: ["python","java","git","sql"], important: ["javascript","rest api","docker","aws","linux"], nice: ["kubernetes","typescript","microservices","ci/cd"] },
-  "Quantitative Analyst": { salary: 135000, growth: "+12%", required: ["python","statistics","linear algebra","sql"], important: ["r","machine learning","time series","quantitative analysis"], nice: ["scala","matlab","deep learning","monte carlo"] },
-  "AI Engineer": { salary: 145000, growth: "+85%", required: ["python","large language models","prompt engineering","machine learning"], important: ["deep learning","pytorch","aws","rest api","docker"], nice: ["rag","fine-tuning","kubernetes","generative ai","mlops"] },
-  "Analytics Engineer": { salary: 105000, growth: "+28%", required: ["sql","dbt","data warehouse","python"], important: ["snowflake","databricks","git","airflow","data visualization"], nice: ["spark","looker","statistics","aws","etl"] },
-  "Product Analyst": { salary: 90000, growth: "+20%", required: ["sql","data analysis","a/b testing","statistics"], important: ["python","tableau","excel","data visualization"], nice: ["machine learning","r","looker","product management"] },
+// ── Platform Data (loaded from data.json — built by build_data.py) ────────────
+// These are populated at startup by loadData() from the static data file,
+// so the site always reflects the latest scraped job-market data.
+let CAREER_PATHS = {};
+let SKILL_CATEGORIES = {};
+let SKILL_ALIASES = {};
+let RESOURCES = {};
+let PROJECT_IDEAS = {};
+let DURATION_WEEKS = {};
+let CAREER_META = {};   // name -> { dataDriven, jobsAnalyzed, industry }
+let DATA_STATS = null;
+
+// Learning resources + durations are kept here (not in data.json) so the
+// roadmap still has links/timing for common skills. Unknown skills default
+// to a generic resource and 3 weeks.
+const RESOURCES_FALLBACK = {
+  "python":[["course","Python for Everybody – Coursera","https://coursera.org/specializations/python"]],
+  "sql":[["course","Mode SQL Tutorial – Free","https://mode.com/sql-tutorial"]],
+  "machine learning":[["course","Andrew Ng ML Specialization – Coursera","https://coursera.org/specializations/machine-learning-introduction"]],
+  "statistics":[["course","Statistics with Python – Coursera","https://coursera.org/specializations/statistics-with-python"]],
+  "excel":[["course","Excel Skills for Business – Coursera","https://coursera.org/specializations/excel"]],
 };
 
-const SKILL_CATEGORIES = {
-  programming: ["python","r","java","javascript","typescript","c++","c#","scala","go","rust","swift","kotlin","matlab","julia","ruby","bash","shell scripting"],
-  data_analytics: ["sql","mysql","postgresql","sqlite","mongodb","pandas","numpy","excel","google sheets","power bi","tableau","looker","data analysis","data visualization","exploratory data analysis","a/b testing"],
-  machine_learning: ["machine learning","deep learning","neural networks","nlp","natural language processing","computer vision","scikit-learn","tensorflow","pytorch","keras","xgboost","lightgbm","random forest","feature engineering","mlops","large language models","generative ai","prompt engineering","rag","fine-tuning"],
-  cloud_devops: ["aws","azure","gcp","docker","kubernetes","terraform","ci/cd","devops","git","github","linux","rest api","microservices","spark","hadoop","kafka","databricks","snowflake","dbt","etl","data pipeline","data warehouse","airflow"],
-  statistics: ["statistics","probability","linear algebra","calculus","bayesian statistics","time series","forecasting","regression analysis","quantitative analysis","optimization","monte carlo"],
-  business: ["project management","agile","scrum","product management","business analysis","data storytelling","business intelligence","strategy","financial modeling"]
-};
+async function loadData() {
+  const res = await fetch('data.json?v=' + Date.now());
+  const data = await res.json();
+  DATA_STATS = data.stats;
 
-const SKILL_ALIASES = {
-  "py":"python","js":"javascript","ml":"machine learning","ai":"machine learning",
-  "postgres":"postgresql","powerbi":"power bi","sklearn":"scikit-learn","torch":"pytorch",
-  "amazon web services":"aws","microsoft azure":"azure","google cloud":"gcp",
-  "nlp":"natural language processing","gen ai":"generative ai","genai":"generative ai",
-  "stat":"statistics","git hub":"github"
-};
+  // Build CAREER_PATHS in the shape the UI expects: {salary, growth, required, important, nice}
+  data.careers.forEach(c => {
+    CAREER_PATHS[c.name] = {
+      salary: c.avg_salary,
+      growth: c.growth,
+      required: c.required || [],
+      important: c.important || [],
+      nice: c.nice_to_have || [],
+    };
+    CAREER_META[c.name] = {
+      dataDriven: !!c.data_driven,
+      jobsAnalyzed: c.jobs_analyzed || 0,
+      industry: c.industry || 'Other',
+    };
+  });
 
-const RESOURCES = {
-  "python": [["course","Python for Everybody – Coursera","https://coursera.org/specializations/python"]],
-  "sql": [["course","Mode SQL Tutorial – Free","https://mode.com/sql-tutorial"],["practice","SQLZoo","https://sqlzoo.net"]],
-  "statistics": [["course","Statistics with Python – Coursera","https://coursera.org/specializations/statistics-with-python"],["book","Think Stats – Free","https://greenteapress.com/thinkstats2"]],
-  "machine learning": [["course","Andrew Ng ML Specialization – Coursera","https://coursera.org/specializations/machine-learning-introduction"]],
-  "deep learning": [["course","Deep Learning Specialization – Coursera","https://coursera.org/specializations/deep-learning"],["practice","Fast.ai – Free","https://fast.ai"]],
-  "pandas": [["course","Kaggle Pandas Course – Free","https://kaggle.com/learn/pandas"]],
-  "numpy": [["docs","NumPy Quickstart","https://numpy.org/doc/stable/user/quickstart"]],
-  "scikit-learn": [["course","Kaggle Intermediate ML – Free","https://kaggle.com/learn/intermediate-machine-learning"]],
-  "tensorflow": [["course","TF Developer Cert – Coursera","https://coursera.org/professional-certificates/tensorflow-in-practice"]],
-  "pytorch": [["docs","PyTorch Tutorials","https://pytorch.org/tutorials"]],
-  "tableau": [["course","Tableau Training – Free","https://public.tableau.com/learn/training"]],
-  "power bi": [["course","Microsoft Learn Power BI – Free","https://learn.microsoft.com/training/powerbi"]],
-  "data visualization": [["course","Kaggle Data Viz – Free","https://kaggle.com/learn/data-visualization"]],
-  "aws": [["cert","AWS Cloud Practitioner Prep","https://aws.amazon.com/certification/certified-cloud-practitioner"]],
-  "docker": [["docs","Docker Getting Started","https://docs.docker.com/get-started"]],
-  "dbt": [["course","dbt Fundamentals – Free","https://courses.getdbt.com/courses/fundamentals"]],
-  "spark": [["docs","PySpark Quick Start","https://spark.apache.org/docs/latest/quick-start"]],
-  "large language models": [["course","LLM Bootcamp – Full Stack DL","https://fullstackdeeplearning.com/llm-bootcamp"]],
-  "prompt engineering": [["course","ChatGPT Prompt Eng – DeepLearning.AI (Free)","https://deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers"]],
-  "a/b testing": [["course","A/B Testing – Udacity (Free)","https://udacity.com/course/ab-testing--ud257"]],
-  "snowflake": [["course","Snowflake Essentials – Free","https://learn.snowflake.com"]],
-};
+  // Skill categories come straight from the taxonomy
+  SKILL_CATEGORIES = data.taxonomy || {};
 
-const PROJECT_IDEAS = {
-  "Data Analyst": ["Build a sales/marketing dashboard in Tableau or Power BI","Write a full data analysis report on a Kaggle public dataset","Create a SQL reporting pipeline from scratch"],
-  "Data Scientist": ["Kaggle competition submission (start with Titanic or Housing Prices)","Build an end-to-end ML model: data → train → evaluate → visualize","Churn prediction model with scikit-learn + full write-up"],
-  "ML Engineer": ["Deploy a trained ML model as a REST API with FastAPI + Docker","Build an MLOps pipeline with experiment tracking (MLflow)","Fine-tune a small LLM for a classification task"],
-  "Data Engineer": ["ETL pipeline: API → transform → PostgreSQL with Airflow scheduling","Full dbt project transforming a public dataset","Build a simple data lake on AWS S3 with Athena querying"],
-  "AI Engineer": ["RAG chatbot using LangChain + a vector database","AI-powered web app using the Anthropic or OpenAI API","Deploy an LLM app with Streamlit or FastAPI"],
-  "Software Engineer": ["Build and deploy a REST API with JWT authentication","Full-stack CRUD app with database","Contribute a bug fix or feature to an open-source GitHub project"],
-  "Business Analyst": ["Executive dashboard with real public business data","Business case analysis: pick a real company decision and evaluate it","Mock A/B test analysis with statistical significance reporting"],
-  "Quantitative Analyst": ["Stock backtesting script with performance metrics","Monte Carlo simulation for portfolio risk estimation","Statistical arbitrage model on public market data"],
-  "Analytics Engineer": ["Full dbt project with staging + intermediate + mart layers","Set up Snowflake + dbt + Metabase BI stack","Design a data warehouse schema from first principles"],
-  "Product Analyst": ["User funnel analysis with drop-off insights","Design and mock-analyze an A/B test","Retention/engagement dashboard from a public product dataset"],
-};
+  // Aliases: skill_lookup maps every term (incl. aliases) -> canonical.
+  // Keep only the entries where term != canonical (the real aliases).
+  SKILL_ALIASES = {};
+  Object.entries(data.skill_lookup || {}).forEach(([term, canon]) => {
+    if (term !== canon) SKILL_ALIASES[term] = canon;
+  });
 
-const DURATION_WEEKS = {
-  "python":6,"sql":4,"statistics":5,"machine learning":8,"deep learning":8,"pandas":2,"numpy":2,
-  "scikit-learn":3,"tensorflow":6,"pytorch":6,"tableau":3,"power bi":3,"data visualization":3,
-  "aws":4,"docker":2,"git":1,"dbt":2,"spark":4,"large language models":4,"prompt engineering":2,
-  "r":4,"etl":3,"a/b testing":2,"time series":3,"snowflake":2,"business analysis":3,
-  "data analysis":3,"excel":2,"data pipeline":3,"data warehouse":3,
-};
+  RESOURCES = RESOURCES_FALLBACK;
+  PROJECT_IDEAS = {};   // roadmap shows generic project prompt when absent
+  DURATION_WEEKS = {};  // unknown -> default 3 weeks (handled in generateRoadmap)
+
+  // Populate the target-career dropdown with all careers, grouped by industry,
+  // with a small marker showing which are backed by live data.
+  const sel = document.getElementById('target-select');
+  if (sel) {
+    const byIndustry = {};
+    data.careers.forEach(c => {
+      (byIndustry[c.industry || 'Other'] ||= []).push(c);
+    });
+    let html = '<option value="">Auto-detect best match</option>';
+    Object.keys(byIndustry).sort().forEach(ind => {
+      html += `<optgroup label="${ind}">`;
+      byIndustry[ind].sort((a,b)=>a.name.localeCompare(b.name)).forEach(c => {
+        const tag = c.data_driven ? ' • live data' : '';
+        html += `<option value="${c.name}">${c.name}${tag}</option>`;
+      });
+      html += '</optgroup>';
+    });
+    sel.innerHTML = html;
+  }
+}
 
 // ── Skill Extraction ──────────────────────────────────────────────────────────
 
@@ -508,6 +513,7 @@ let state = { profile: null, matches: null, target: null };
 // ── Main Analysis ──────────────────────────────────────────────────────────────
 
 function runAnalysis() {
+  if (!Object.keys(CAREER_PATHS).length) { alert('Still loading job-market data — give it a second and try again.'); return; }
   const text = document.getElementById('resume-text').value.trim();
   if (!text) { alert('Please paste your resume text first.'); return; }
 
@@ -590,7 +596,12 @@ function renderMatches() {
 
   const scoreColor = s => s >= 70 ? 'var(--accent2)' : s >= 45 ? 'var(--accent)' : s >= 25 ? 'var(--amber)' : 'var(--accent3)';
 
-  document.getElementById('careers-grid').innerHTML = matches.slice(0,8).map((m,i) => `
+  document.getElementById('careers-grid').innerHTML = matches.slice(0,8).map((m,i) => {
+    const meta = CAREER_META[m.career] || {};
+    const badge = meta.dataDriven
+      ? `<span class="stat-pill" style="background:rgba(29,158,117,0.15);color:#1D9E75" title="Skills derived from real job postings">📊 ${meta.jobsAnalyzed} live postings</span>`
+      : `<span class="stat-pill" style="background:rgba(186,117,23,0.15);color:#BA7517" title="Hand-curated estimate — live data coming as more sources are added">✎ curated estimate</span>`;
+    return `
     <div class="career-card ${i===0?'top':''}" onclick="focusCareer('${m.career}')">
       <div class="career-name">${m.career}</div>
       <div class="score-bar-bg">
@@ -603,12 +614,13 @@ function renderMatches() {
           <span class="stat-pill stat-growth">${m.growth}</span>
         </div>
       </div>
+      <div style="margin-top:8px">${badge}</div>
       <div class="skills-grid" style="margin-top:12px">
         ${m.matched.slice(0,4).map(s => `<span class="skill-tag have">✓ ${s}</span>`).join('')}
         ${m.missingReq.slice(0,2).map(s => `<span class="skill-tag missing-required">✗ ${s}</span>`).join('')}
       </div>
     </div>
-  `).join('');
+  `;}).join('');
 }
 
 // ── Render: Gap Analysis ──────────────────────────────────────────────────────
@@ -880,10 +892,51 @@ function handleFile(input) {
 }
 
 function readFile(file) {
+  const zone = document.getElementById('upload-zone');
+  const box = document.getElementById('resume-text');
+  const name = (file.name || '').toLowerCase();
+
+  // PDF → extract real text with PDF.js (the file is binary, not text)
+  if (name.endsWith('.pdf') || file.type === 'application/pdf') {
+    if (!window.pdfjsLib) {
+      box.value = 'Could not load the PDF reader. Please paste your resume text instead.';
+      return;
+    }
+    box.value = 'Reading PDF…';
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const reader = new FileReader();
+    reader.onload = async e => {
+      try {
+        const pdf = await pdfjsLib.getDocument({ data: e.target.result }).promise;
+        let text = '';
+        for (let p = 1; p <= pdf.numPages; p++) {
+          const page = await pdf.getPage(p);
+          const content = await page.getTextContent();
+          text += content.items.map(it => it.str).join(' ') + '\n';
+        }
+        box.value = text.trim() || 'No text found in this PDF. Try pasting your resume instead.';
+        zone.classList.add('active');
+      } catch (err) {
+        console.error('PDF parse failed:', err);
+        box.value = 'Could not read this PDF. Please paste your resume text instead.';
+      }
+    };
+    reader.readAsArrayBuffer(file);
+    return;
+  }
+
+  // .doc/.docx are not plain text either — guide the user to paste
+  if (name.endsWith('.doc') || name.endsWith('.docx')) {
+    box.value = 'Word files can\'t be read directly in the browser yet — please copy and paste your resume text into this box, or upload a PDF.';
+    return;
+  }
+
+  // Plain text (.txt or anything else) → read as text, as before
   const reader = new FileReader();
   reader.onload = e => {
-    document.getElementById('resume-text').value = e.target.result;
-    document.getElementById('upload-zone').classList.add('active');
+    box.value = e.target.result;
+    zone.classList.add('active');
   };
   reader.readAsText(file);
 }
@@ -892,6 +945,17 @@ function readFile(file) {
 ['matches','gap','roadmap','market'].forEach(p => {
   const el = document.getElementById(`nav-${p}`);
   if (el) el.style.opacity = '0.35';
+});
+
+// Load the job-market data, then enable the analyze button.
+const _analyzeBtn = document.querySelector('.analyze-btn');
+if (_analyzeBtn) { _analyzeBtn.disabled = true; _analyzeBtn.textContent = 'Loading data…'; }
+loadData().then(() => {
+  if (_analyzeBtn) { _analyzeBtn.disabled = false; _analyzeBtn.textContent = '⚡ Generate Intelligence Report'; }
+  console.log(`CareerIQ data loaded: ${DATA_STATS.total_careers} careers, ${DATA_STATS.data_driven_careers} data-driven, ${DATA_STATS.total_jobs_analyzed} jobs analyzed.`);
+}).catch(err => {
+  console.error('Failed to load data.json:', err);
+  if (_analyzeBtn) _analyzeBtn.textContent = 'Data failed to load — refresh';
 });
 </script>
 </body>
