@@ -4,7 +4,7 @@ An AI-powered platform that analyzes your background, compares it against real l
 
 ## What It Does
 - Parses your resume and extracts 100+ skills
-- Scores you against 10 career paths with weighted matching
+- Scores you against several career paths with weighted matching
 - Identifies exact skill gaps (required vs. important vs. nice-to-have)
 - Generates a month-by-month learning roadmap with real resources
 - Shows market intelligence: skill demand, salary data, growth trends
