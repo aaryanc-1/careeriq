@@ -48,7 +48,7 @@
   .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
 
   .main { flex: 1; overflow-y: auto; }
-  .page { display: none; padding: 40px 48px; }
+  .page { display: none; padding: 40px 56px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box; }
   .page.active { display: block; }
 
   /* Header */
@@ -212,26 +212,49 @@
   .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
   .empty-state { text-align: center; padding: 60px; color: var(--muted); font-size: 14px; }
   .empty-icon { font-size: 40px; margin-bottom: 12px; }
+
+  /* ── Mobile (phones, narrow screens) ─────────────────────────────────── */
   @media (max-width: 640px) {
+    /* Stack the whole layout vertically instead of sidebar + main side by side */
     .shell { flex-direction: column; }
+
+    /* Sidebar becomes a compact horizontal top bar */
     .sidebar {
       width: 100%; min-height: auto; flex-direction: column;
       padding: 12px 16px; box-sizing: border-box;
     }
     .sidebar .logo { margin-bottom: 10px; }
+    /* Nav items lay out in a wrapping row so they don't take full-height */
     .sidebar .nav-item {
       display: inline-flex; margin: 2px 4px 2px 0; padding: 6px 10px;
       font-size: 12px; border-radius: 6px;
     }
+
+    /* Reduce the heavy desktop page padding so content uses the full width */
     .page { padding: 20px 16px; }
+
+    /* The core fix: every multi-column grid collapses to a single column */
     .careers-grid { grid-template-columns: 1fr; gap: 12px; }
     .two-col { grid-template-columns: 1fr; gap: 16px; }
     .stats-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    /* Cards: tighter padding, never overflow the screen edge */
     .card { padding: 16px; }
     .career-card { padding: 14px; }
+
+    /* Fixed-width elements that caused overflow now shrink/wrap */
     .market-skill-name { width: auto; max-width: 50%; }
     .page-header { flex-direction: column; gap: 8px; }
+
+    /* Headings a touch smaller on phones */
     .page-title { font-size: 22px; }
+  }
+
+  /* Inline grids (defined via style="" in JS) also need to collapse on phones.
+     These class hooks are added to those elements so the media query can reach them. */
+  @media (max-width: 640px) {
+    .mobile-stack { grid-template-columns: 1fr !important; }
+    .mobile-flexwrap { flex-direction: column !important; gap: 16px !important; }
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -249,6 +272,7 @@
     <div class="nav-item" onclick="nav('gap')" id="nav-gap"><span class="nav-dot"></span> Gap Analysis</div>
     <div class="nav-item" onclick="nav('roadmap')" id="nav-roadmap"><span class="nav-dot"></span> Roadmap</div>
     <div class="nav-item" onclick="nav('market')" id="nav-market"><span class="nav-dot"></span> Market Intel</div>
+    <div class="nav-item" onclick="nav('jobs')" id="nav-jobs"><span class="nav-dot"></span> Recent Openings</div>
   </nav>
 
   <!-- Main -->
@@ -351,6 +375,18 @@
       <div id="market-content"></div>
     </div>
 
+    <!-- Jobs Page -->
+    <div class="page" id="page-jobs">
+      <div class="page-header" style="display:flex; align-items:flex-start; justify-content:space-between;">
+        <div>
+          <div class="page-title">Recent Openings</div>
+          <div class="page-sub">Real job postings matched to each career</div>
+        </div>
+        <select class="target-select" id="jobs-career-select" onchange="updateJobs()"></select>
+      </div>
+      <div id="jobs-content"></div>
+    </div>
+
   </main>
 </div>
 
@@ -398,6 +434,7 @@ async function loadData() {
       dataDriven: !!c.data_driven,
       jobsAnalyzed: c.jobs_analyzed || 0,
       industry: c.industry || 'Other',
+      recentJobs: c.recent_jobs || [],
     };
   });
 
@@ -573,14 +610,16 @@ function finishAnalysis(text, targetCareer) {
   const careerOptions = matches.map(m => `<option value="${m.career}" ${m.career===target?'selected':''}>${m.career} (${m.score}%)</option>`).join('');
   document.getElementById('gap-career-select').innerHTML = careerOptions;
   document.getElementById('roadmap-career-select').innerHTML = careerOptions;
+  document.getElementById('jobs-career-select').innerHTML = careerOptions;
 
   renderMatches();
   renderGapAnalysis(target);
   renderRoadmap(target);
   renderMarket();
+  renderJobs(target);
 
   // Unlock nav
-  ['matches','gap','roadmap','market'].forEach(p => {
+  ['matches','gap','roadmap','market','jobs'].forEach(p => {
     document.getElementById(`nav-${p}`).style.opacity = '1';
   });
 
@@ -653,13 +692,13 @@ function renderGapAnalysis(careerName) {
 
   const html = `
     <div class="card" style="margin-bottom:24px">
-      <div style="display:flex;align-items:flex-start;gap:32px">
+      <div class="mobile-flexwrap" style="display:flex;align-items:flex-start;gap:32px">
         <div>
           <div class="card-label">Match Score</div>
           <div class="big-score" style="color:${m.score>=70?'var(--accent2)':m.score>=45?'var(--accent)':'var(--amber)'}">${m.score}%</div>
         </div>
         <div style="flex:1">
-          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:4px">
+          <div class="mobile-stack" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:4px">
             <div><div class="card-label">Avg Salary</div><div style="font-size:20px;font-weight:600;color:var(--accent2);font-family:var(--font-head)">$${(cp.salary/1000).toFixed(0)}k</div></div>
             <div><div class="card-label">Market Growth</div><div style="font-size:20px;font-weight:600;color:var(--amber);font-family:var(--font-head)">${cp.growth}</div></div>
             <div><div class="card-label">Skills Matched</div><div style="font-size:20px;font-weight:600;font-family:var(--font-head)">${m.matched.length} / ${cp.required.length + cp.important.length + cp.nice.length}</div></div>
@@ -751,7 +790,7 @@ function renderRoadmap(careerName) {
   }
 
   const html = `
-    <div class="card" style="margin-bottom:28px;display:flex;gap:32px">
+    <div class="card mobile-flexwrap" style="margin-bottom:28px;display:flex;gap:32px">
       <div style="text-align:center">
         <div class="card-label">Timeline</div>
         <div style="font-size:28px;font-weight:700;font-family:var(--font-head)">${steps.length} mo</div>
@@ -870,6 +909,82 @@ function renderMarket() {
   `;
 }
 
+// ── Render: Recent Job Openings ────────────────────────────────────────────────
+
+function timeAgo(dateStr) {
+  if (!dateStr) return 'recently';
+  const then = new Date(dateStr);
+  if (isNaN(then)) return 'recently';
+  const days = Math.floor((Date.now() - then.getTime()) / 86400000);
+  if (days <= 0) return 'today';
+  if (days === 1) return 'yesterday';
+  if (days < 7) return `${days} days ago`;
+  if (days < 14) return 'last week';
+  if (days < 31) return `${Math.floor(days/7)} weeks ago`;
+  return `${Math.floor(days/30)} month${days>=60?'s':''} ago`;
+}
+
+function salaryLabel(j) {
+  if (j.salary_min && j.salary_max)
+    return `$${Math.round(j.salary_min/1000)}k–$${Math.round(j.salary_max/1000)}k`;
+  if (j.salary_min) return `from $${Math.round(j.salary_min/1000)}k`;
+  return 'Salary not listed';
+}
+
+function updateJobs() {
+  const career = document.getElementById('jobs-career-select').value;
+  renderJobs(career);
+}
+
+function renderJobs(careerName) {
+  const meta = CAREER_META[careerName] || {};
+  const jobs = meta.recentJobs || [];
+  const el = document.getElementById('jobs-content');
+
+  if (!jobs.length) {
+    el.innerHTML = `
+      <div class="card" style="text-align:center;padding:48px 24px">
+        <div style="font-size:34px;margin-bottom:10px">🔍</div>
+        <div style="font-size:15px;font-weight:500;margin-bottom:6px">No recent openings collected for ${careerName} yet</div>
+        <div style="color:var(--muted);font-size:13.5px;max-width:460px;margin:0 auto">
+          This career is currently a curated estimate, so we haven't pulled live postings for it.
+          Try one of your data-backed matches to see real openings.
+        </div>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div style="font-size:13.5px;color:var(--text)">
+        Showing <strong>${jobs.length}</strong> recent openings for <strong>${careerName}</strong>
+      </div>
+      <div style="font-size:12px;color:var(--muted)">
+        Updated weekly · postings may already be filled · job data via Adzuna
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      ${jobs.map(j => `
+        <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+          <div style="flex:1;min-width:200px">
+            <div style="font-size:15px;font-weight:600;color:var(--text)">${j.title}</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:3px">
+              ${j.company ? j.company : 'Company undisclosed'}${j.location ? ' · ' + j.location : ''}
+            </div>
+            <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
+              <span class="stat-pill stat-salary">${salaryLabel(j)}</span>
+              <span class="stat-pill" style="background:rgba(255,255,255,0.05);color:var(--muted)">Posted ${timeAgo(j.posted_at)}</span>
+            </div>
+          </div>
+          ${j.url ? `<a href="${j.url}" target="_blank" rel="noopener noreferrer" class="analyze-btn" style="text-decoration:none;padding:10px 20px;font-size:13.5px;white-space:nowrap">View &amp; Apply →</a>` : ''}
+        </div>
+      `).join('')}
+    </div>
+    <div style="font-size:11.5px;color:var(--muted);margin-top:16px;text-align:center">
+      Openings are a snapshot from our most recent data refresh and may no longer be available. Always confirm on the employer's site.
+    </div>`;
+}
+
 // ── Navigation ────────────────────────────────────────────────────────────────
 
 function nav(page) {
@@ -885,6 +1000,7 @@ function focusCareer(careerName) {
   state.target = careerName;
   document.getElementById('gap-career-select').value = careerName;
   document.getElementById('roadmap-career-select').value = careerName;
+  const jsel=document.getElementById('jobs-career-select'); if(jsel) jsel.value = careerName;
   renderGapAnalysis(careerName);
   renderRoadmap(careerName);
   nav('gap');
@@ -963,7 +1079,7 @@ function readFile(file) {
 }
 
 // Lock nav items until analysis runs
-['matches','gap','roadmap','market'].forEach(p => {
+['matches','gap','roadmap','market','jobs'].forEach(p => {
   const el = document.getElementById(`nav-${p}`);
   if (el) el.style.opacity = '0.35';
 });

@@ -82,3 +82,51 @@ def get_job_count() -> int:
         return cur.fetchone()["c"]
     finally:
         conn.close()
+
+
+def get_recent_jobs_by_career(limit_per_career: int = 25) -> dict:
+    """
+    Read jobs from the DB and group them under careers using the SAME
+    specific-first title matching the rest of the pipeline uses (so a job
+    lands in the right career — this also addresses the mis-filing issue).
+
+    Returns: { career_name: [ {title, company, location, salary_min,
+               salary_max, url, posted_at}, ... ] }
+    Jobs are newest-first; capped at limit_per_career each.
+    """
+    # Import here to avoid a circular import at module load time.
+    from data_collection.career_keywords import get_career_for_title
+
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute("""
+            SELECT j.title, c.name AS company, j.location,
+                   j.salary_min, j.salary_max, j.url, j.posted_at
+            FROM jobs j
+            LEFT JOIN companies c ON c.id = j.company_id
+            WHERE j.title IS NOT NULL
+            ORDER BY j.posted_at DESC
+        """)
+        rows = cur.fetchall()
+    finally:
+        conn.close()
+
+    grouped = {}
+    for r in rows:
+        career = get_career_for_title(r["title"])
+        if not career:
+            continue
+        bucket = grouped.setdefault(career, [])
+        if len(bucket) >= limit_per_career:
+            continue
+        bucket.append({
+            "title": r["title"],
+            "company": r["company"] or "",
+            "location": r["location"] or "",
+            "salary_min": r["salary_min"],
+            "salary_max": r["salary_max"],
+            "url": r["url"] or "",
+            "posted_at": r["posted_at"],
+        })
+    return grouped
