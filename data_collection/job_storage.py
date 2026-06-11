@@ -96,13 +96,14 @@ def get_recent_jobs_by_career(limit_per_career: int = 25) -> dict:
     """
     # Import here to avoid a circular import at module load time.
     from data_collection.career_keywords import get_career_for_title
+    from utils.level_detection import detect_job_level
 
     conn = get_connection()
     try:
         cur = conn.cursor()
         cur.execute("""
             SELECT j.title, c.name AS company, j.location,
-                   j.salary_min, j.salary_max, j.url, j.posted_at
+                   j.salary_min, j.salary_max, j.url, j.posted_at, j.description
             FROM jobs j
             LEFT JOIN companies c ON c.id = j.company_id
             WHERE j.title IS NOT NULL
@@ -128,5 +129,6 @@ def get_recent_jobs_by_career(limit_per_career: int = 25) -> dict:
             "salary_max": r["salary_max"],
             "url": r["url"] or "",
             "posted_at": r["posted_at"],
+            "level": detect_job_level(r["title"], r["description"] or ""),
         })
     return grouped
