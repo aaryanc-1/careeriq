@@ -129,6 +129,7 @@ def get_recent_jobs_by_career(limit_per_career: int = 25) -> dict:
             "salary_max": r["salary_max"],
             "url": r["url"] or "",
             "posted_at": r["posted_at"],
-            "level": detect_job_level(r["title"], r["description"] or ""),
+            "level": detect_job_level(r["title"], r["description"] or "",
+                                       r["salary_min"], r["salary_max"]),
         })
     return grouped

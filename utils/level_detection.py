@@ -16,73 +16,90 @@ detect_resume_level(resume_text)    -> one of the 4 levels
 
 import re
 
-# Signals are checked in priority order. Most specific / highest-confidence first.
-# Each entry: (level, [keywords]). We check senior and internship before entry/mid
-# because those have the clearest, least-ambiguous signals.
 
-SENIOR_SIGNALS = [
-    "senior", "sr.", "sr ", "lead ", "principal", "staff ", "director",
-    "head of", "vp ", "vice president", "manager", "architect",
-    "iii", "iv", " v ", "10+ years", "8+ years", "7+ years",
-    "6+ years", "5+ years", "expert", "chief",
-]
-
-INTERNSHIP_SIGNALS = [
-    "intern", "internship", "co-op", "coop", "co op", "trainee",
-    "apprentice", "summer analyst", "work study", "practicum",
-]
-
-ENTRY_SIGNALS = [
-    "entry level", "entry-level", "junior", "jr.", "jr ", "associate",
-    "graduate", "grad ", "new grad", "early career", "level i", " i ",
-    "0-2 years", "0-1 years", "1-2 years", "no experience", "trainee",
-    "assistant",
-]
-
-MID_SIGNALS = [
-    "mid level", "mid-level", "intermediate", "level ii", " ii ",
-    "3-5 years", "2-4 years", "3+ years", "4+ years", "2+ years",
-]
-
-
-def _contains_any(text: str, signals) -> bool:
-    return any(s in text for s in signals)
-
-
-def detect_job_level(title: str, description: str = "") -> str:
+def _has_word(text: str, signals) -> bool:
     """
-    Infer a job's seniority level. Title is weighted most heavily
-    (it's the clearest signal); description is a fallback.
+    True if any signal appears as a WHOLE word/phrase in text.
+    This prevents 'intern' from matching inside 'internal'/'international',
+    or 'lead' inside 'leader/leading' when we don't want it to.
     """
-    t = f" {(title or '').lower()} "
+    for s in signals:
+        s = s.strip()
+        if not s:
+            continue
+        # \b = word boundary. Escape the signal so '+' etc. are literal.
+        if re.search(r"\b" + re.escape(s) + r"\b", text):
+            return True
+    return False
+
+
+def _max_years(text: str) -> int:
+    """Largest 'N years' figure mentioned, or 0 if none."""
+    yrs = [int(n) for n in re.findall(r"(\d{1,2})\+?\s*years?", text)]
+    return max(yrs) if yrs else 0
+
+
+def _max_salary(salary_min, salary_max) -> float:
+    vals = [v for v in (salary_min, salary_max) if v]
+    return max(vals) if vals else 0
+
+
+def detect_job_level(title: str, description: str = "",
+                     salary_min=None, salary_max=None) -> str:
+    """
+    Infer a job's seniority level — TITLE-FIRST with contextual guards.
+
+    Order of confidence:
+      1. Title keywords (highest confidence)
+      2. Contextual guards (salary, years-of-experience) to veto bad guesses
+      3. Description keywords (only as a weak fallback, whole-word)
+    """
+    t = (title or "").lower()
     d = (description or "").lower()
+    years = _max_years(t + " " + d)
+    top_salary = _max_salary(salary_min, salary_max)
 
-    # 1) Internship is the most distinct signal — check first, title or desc.
-    if _contains_any(t, INTERNSHIP_SIGNALS) or _contains_any(d, INTERNSHIP_SIGNALS):
+    title_has = lambda sig: _has_word(t, sig)
+
+    # ── Guards: things that strongly mean "NOT an internship/entry" ──
+    senior_title_words = ["developer", "engineer", "manager", "director",
+                          "lead", "principal", "senior", "architect", "head"]
+    looks_professional = (
+        top_salary >= 80000 or years >= 3 or _has_word(t, senior_title_words)
+    )
+
+    # 1) INTERNSHIP — only trust the TITLE (whole word), and never if it
+    #    clearly looks like a professional role by salary/experience/title.
+    intern_title = ["intern", "internship", "co-op", "coop", "trainee",
+                    "apprentice", "summer analyst", "practicum"]
+    if title_has(intern_title) and not looks_professional:
         return "internship"
 
-    # 2) Senior signals in the TITLE are high-confidence.
-    if _contains_any(t, SENIOR_SIGNALS):
+    # 2) SENIOR — strong title signals, or high experience/salary.
+    senior_sig = ["senior", "sr", "lead", "principal", "staff", "director",
+                  "head", "vp", "vice president", "manager", "architect",
+                  "chief", "iii", "iv", "expert"]
+    if title_has(senior_sig) or years >= 6 or top_salary >= 150000:
         return "senior"
 
-    # 3) Entry signals in the title.
-    if _contains_any(t, ENTRY_SIGNALS):
+    # 3) ENTRY — junior/entry/grad signals in the TITLE.
+    entry_sig = ["entry", "junior", "jr", "associate", "graduate", "grad",
+                 "trainee", "assistant", "i"]  # 'i' as a standalone level token
+    if title_has(["entry level", "entry-level", "junior", "jr", "associate",
+                  "graduate", "grad", "new grad", "early career"]):
+        return "entry"
+    if years and years <= 1:
         return "entry"
 
-    # 4) Mid signals in the title.
-    if _contains_any(t, MID_SIGNALS):
+    # 4) MID — explicit mid signals or 2–5 years.
+    if title_has(["mid level", "mid-level", "intermediate", "ii"]) or (2 <= years <= 5):
         return "mid"
 
-    # 5) Fall back to description-based experience hints.
-    if _contains_any(d, SENIOR_SIGNALS):
-        return "senior"
-    if _contains_any(d, ENTRY_SIGNALS):
-        return "entry"
-    if _contains_any(d, MID_SIGNALS):
-        return "mid"
+    # 5) Weak description fallback for internships (whole word, guarded).
+    if _has_word(d, ["internship", "intern position", "summer intern"]) and not looks_professional:
+        return "internship"
 
-    # 6) No clear signal → default to "mid" (the safest neutral bucket,
-    #    since most untitled-level professional postings sit here).
+    # 6) Default — neutral professional bucket.
     return "mid"
 
 
