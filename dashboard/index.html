@@ -273,6 +273,7 @@
     <div class="nav-item" onclick="nav('roadmap')" id="nav-roadmap"><span class="nav-dot"></span> Roadmap</div>
     <div class="nav-item" onclick="nav('market')" id="nav-market"><span class="nav-dot"></span> Market Intel</div>
     <div class="nav-item" onclick="nav('jobs')" id="nav-jobs"><span class="nav-dot"></span> Recent Openings</div>
+    <div class="nav-item" onclick="nav('score')" id="nav-score"><span class="nav-dot"></span> Resume Score</div>
   </nav>
 
   <!-- Main -->
@@ -385,6 +386,18 @@
         <select class="target-select" id="jobs-career-select" onchange="updateJobs()"></select>
       </div>
       <div id="jobs-content"></div>
+    </div>
+
+    <!-- Resume Score Page -->
+    <div class="page" id="page-score">
+      <div class="page-header" style="display:flex; align-items:flex-start; justify-content:space-between;">
+        <div>
+          <div class="page-title">Resume Readiness Score</div>
+          <div class="page-sub">How well your resume is built — and how to improve it</div>
+        </div>
+        <select class="target-select" id="score-career-select" onchange="updateScore()"></select>
+      </div>
+      <div id="score-content"></div>
     </div>
 
   </main>
@@ -633,15 +646,17 @@ function finishAnalysis(text, targetCareer) {
   document.getElementById('gap-career-select').innerHTML = careerOptions;
   document.getElementById('roadmap-career-select').innerHTML = careerOptions;
   document.getElementById('jobs-career-select').innerHTML = careerOptions;
+  document.getElementById('score-career-select').innerHTML = careerOptions;
 
   renderMatches();
   renderGapAnalysis(target);
   renderRoadmap(target);
   renderMarket();
   renderJobs(target);
+  renderScore(target);
 
   // Unlock nav
-  ['matches','gap','roadmap','market','jobs'].forEach(p => {
+  ['matches','gap','roadmap','market','jobs','score'].forEach(p => {
     document.getElementById(`nav-${p}`).style.opacity = '1';
   });
 
@@ -1052,6 +1067,139 @@ function renderJobs(careerName) {
     </div>`;
 }
 
+// ── Resume Readiness Score ─────────────────────────────────────────────────────
+
+function computeReadiness(text, userSkills, targetReq, targetImp) {
+  const factors = [];
+  let earned = 0, possible = 0;
+  function factor(name, got, max, improvement) {
+    earned += got; possible += max;
+    factors.push({ name, got, max, pass: got >= max * 0.6, improvement: got >= max*0.6 ? null : improvement });
+  }
+  const targetSkills = [...new Set([...(targetReq||[]), ...(targetImp||[])])];
+  const have = new Set((userSkills||[]).map(s => String(s).toLowerCase()));
+  const matched = targetSkills.filter(s => have.has(s.toLowerCase()));
+  const missing = targetSkills.filter(s => !have.has(s.toLowerCase()));
+  const kwRatio = targetSkills.length ? matched.length / targetSkills.length : 0;
+  factor("Keyword match vs target role", Math.round(kwRatio*35), 35,
+    missing.length ? `Add these skills your target role expects (only if you genuinely have them): ${missing.slice(0,6).join(", ")}` : null);
+
+  const sections = [["experience", /experience|employment|work history/i],
+    ["education", /education|university|college|degree|bachelor|b\.?s\.?/i],
+    ["skills", /skills|technologies|technical|proficienc/i]];
+  let secGot = 0; const missingSec = [];
+  sections.forEach(([n,re]) => { if (re.test(text)) secGot += 5; else missingSec.push(n); });
+  factor("Core sections present", secGot, 15,
+    missingSec.length ? `Add clear section headings for: ${missingSec.join(", ")}` : null);
+
+  let contact = 0; const missC = [];
+  if (/[\w.+-]+@[\w-]+\.[\w.-]+/.test(text)) contact += 4; else missC.push("email");
+  if (/(\+?\d[\d\s().-]{7,}\d)/.test(text)) contact += 3; else missC.push("phone");
+  if (/linkedin\.com|github\.com|https?:\/\//i.test(text)) contact += 3; else missC.push("a LinkedIn/GitHub/portfolio link");
+  factor("Contact info", contact, 10,
+    missC.length ? `Add ${missC.join(", ")} so recruiters can reach you` : null);
+
+  const numbers = (text.match(/\b\d+%|\b\d[\d,]*\+?\b/g) || []).length;
+  const qGot = numbers >= 5 ? 15 : numbers >= 2 ? 9 : numbers >= 1 ? 4 : 0;
+  factor("Quantified impact (numbers & metrics)", qGot, 15,
+    qGot < 15 ? "Add concrete numbers to your bullets (e.g. 'analyzed 9,000+ records', 'cut errors by 30%')" : null);
+
+  const verbs = ["built","designed","led","developed","created","engineered","analyzed",
+    "implemented","launched","architected","automated","optimized","managed","delivered","shipped","produced","drove"];
+  const verbHits = verbs.filter(v => new RegExp(`\\b${v}`, "i").test(text)).length;
+  const weak = /responsible for|duties included|worked on|helped with/i.test(text);
+  let vGot = Math.min(15, verbHits * 3);
+  if (weak) vGot = Math.max(0, vGot - 4);
+  factor("Strong action verbs", vGot, 15,
+    vGot < 15 ? "Start bullets with strong verbs (built, led, designed, analyzed) and avoid 'responsible for' / 'helped with'" : null);
+
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  let lGot = (words >= 250 && words <= 900) ? 10 : (words >= 150 && words <= 1200) ? 6 : 2;
+  factor("Length & density", lGot, 10,
+    lGot < 10 ? (words < 250 ? "Resume looks short — add more detail to your experience and projects" : "Resume looks long — tighten to the most relevant, recent content") : null);
+
+  const score = Math.round((earned / possible) * 100);
+  let band, color;
+  if (score >= 80) { band = "Strong"; color = "#1D9E75"; }
+  else if (score >= 60) { band = "Good — a few fixes"; color = "#3B82C4"; }
+  else if (score >= 40) { band = "Needs work"; color = "#BA7517"; }
+  else { band = "Weak — several fixes"; color = "#C0506B"; }
+  return { score, band, color, factors, matched, missing };
+}
+
+function updateScore() {
+  const career = document.getElementById('score-career-select').value;
+  renderScore(career);
+}
+
+function renderScore(careerName) {
+  const el = document.getElementById('score-content');
+  if (!state.profile) {
+    el.innerHTML = `<div class="card" style="padding:32px;text-align:center;color:var(--muted)">Upload your resume first to see your readiness score.</div>`;
+    return;
+  }
+  const cp = CAREER_PATHS[careerName] || {};
+  const r = computeReadiness(state.profile.text, state.profile.skills, cp.required, cp.important);
+  const improvements = r.factors.filter(f => f.improvement).sort((a,b) => (b.max-b.got)-(a.max-a.got));
+
+  el.innerHTML = `
+    <div class="card" style="margin-bottom:16px;display:flex;align-items:center;gap:28px;flex-wrap:wrap">
+      <div style="text-align:center;min-width:140px">
+        <div style="font-size:54px;font-weight:700;line-height:1;color:${r.color}">${r.score}</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:4px">out of 100</div>
+        <div style="margin-top:8px;font-size:14px;font-weight:600;color:${r.color}">${r.band}</div>
+      </div>
+      <div style="flex:1;min-width:240px">
+        <div style="font-size:14px;color:var(--text);margin-bottom:6px">Readiness for <strong>${careerName}</strong></div>
+        <div style="font-size:12.5px;color:var(--muted);line-height:1.5">
+          This is CareerIQ's own readiness check — based on keyword match, structure, and writing quality.
+          It is <strong>not</strong> a specific employer's ATS result (those systems are private and all differ).
+          Use it as a guide to spot fixable issues.
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px">
+      <div style="font-size:14px;font-weight:600;margin-bottom:12px">Score breakdown</div>
+      ${r.factors.map(f => {
+        const pct = Math.round((f.got/f.max)*100);
+        const col = f.pass ? '#1D9E75' : (pct>=40?'#BA7517':'#C0506B');
+        return `<div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px">
+            <span style="color:var(--text)">${f.pass?'✓':'•'} ${f.name}</span>
+            <span style="color:${col}">${f.got}/${f.max}</span>
+          </div>
+          <div style="height:6px;border-radius:4px;background:rgba(255,255,255,0.07)">
+            <div style="height:100%;border-radius:4px;width:${pct}%;background:${col}"></div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    ${improvements.length ? `
+    <div class="card">
+      <div style="font-size:14px;font-weight:600;margin-bottom:4px">How to improve your score</div>
+      <div style="font-size:12.5px;color:var(--muted);margin-bottom:14px">Ranked by impact — start at the top.</div>
+      ${improvements.map((f,i) => `
+        <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06)">
+          <div style="flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600">${i+1}</div>
+          <div style="flex:1">
+            <div style="font-size:13px;color:var(--text);font-weight:500">${f.name} <span style="color:var(--muted);font-weight:400">(+${f.max-f.got} pts)</span></div>
+            <div style="font-size:13px;color:var(--muted);margin-top:3px;line-height:1.5">${f.improvement}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>` : `
+    <div class="card" style="text-align:center;padding:28px;color:#1D9E75;font-size:14px">
+      🎉 No major issues found for this target — your resume is well-built. Try other target careers to compare.
+    </div>`}
+
+    <div style="font-size:11.5px;color:var(--muted);margin-top:16px;text-align:center;line-height:1.6">
+      The readiness score is CareerIQ's own estimate from your resume text and your selected target career.
+      Real applicant-tracking systems vary by employer and are private — treat this as guidance, not a guarantee.
+    </div>`;
+}
+
 // ── Navigation ────────────────────────────────────────────────────────────────
 
 function nav(page) {
@@ -1068,6 +1216,7 @@ function focusCareer(careerName) {
   document.getElementById('gap-career-select').value = careerName;
   document.getElementById('roadmap-career-select').value = careerName;
   const jsel=document.getElementById('jobs-career-select'); if(jsel) jsel.value = careerName;
+  const ssel=document.getElementById('score-career-select'); if(ssel) ssel.value = careerName;
   renderGapAnalysis(careerName);
   renderRoadmap(careerName);
   nav('gap');
@@ -1146,7 +1295,7 @@ function readFile(file) {
 }
 
 // Lock nav items until analysis runs
-['matches','gap','roadmap','market','jobs'].forEach(p => {
+['matches','gap','roadmap','market','jobs','score'].forEach(p => {
   const el = document.getElementById(`nav-${p}`);
   if (el) el.style.opacity = '0.35';
 });
