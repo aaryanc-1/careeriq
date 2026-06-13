@@ -45,61 +45,50 @@ def _max_salary(salary_min, salary_max) -> float:
 
 
 def detect_job_level(title: str, description: str = "",
-                     salary_min=None, salary_max=None) -> str:
+                     salary_min=None, salary_max=None, currency="USD") -> str:
     """
     Infer a job's seniority level — TITLE-FIRST with contextual guards.
-
-    Order of confidence:
-      1. Title keywords (highest confidence)
-      2. Contextual guards (salary, years-of-experience) to veto bad guesses
-      3. Description keywords (only as a weak fallback, whole-word)
+    Salary guards only apply for USD/USD-like currencies, since absolute
+    numbers differ wildly across currencies (₹900k is entry-level in India).
     """
     t = (title or "").lower()
     d = (description or "").lower()
     years = _max_years(t + " " + d)
-    top_salary = _max_salary(salary_min, salary_max)
+    # Only trust salary thresholds for currencies on a similar scale to USD.
+    usd_like = currency in ("USD", "CAD", "AUD", "GBP", "EUR", "NZD", "SGD", "")
+    top_salary = _max_salary(salary_min, salary_max) if usd_like else 0
 
     title_has = lambda sig: _has_word(t, sig)
 
-    # ── Guards: things that strongly mean "NOT an internship/entry" ──
     senior_title_words = ["developer", "engineer", "manager", "director",
                           "lead", "principal", "senior", "architect", "head"]
     looks_professional = (
         top_salary >= 80000 or years >= 3 or _has_word(t, senior_title_words)
     )
 
-    # 1) INTERNSHIP — only trust the TITLE (whole word), and never if it
-    #    clearly looks like a professional role by salary/experience/title.
     intern_title = ["intern", "internship", "co-op", "coop", "trainee",
                     "apprentice", "summer analyst", "practicum"]
     if title_has(intern_title) and not looks_professional:
         return "internship"
 
-    # 2) SENIOR — strong title signals, or high experience/salary.
     senior_sig = ["senior", "sr", "lead", "principal", "staff", "director",
                   "head", "vp", "vice president", "manager", "architect",
                   "chief", "iii", "iv", "expert"]
     if title_has(senior_sig) or years >= 6 or top_salary >= 150000:
         return "senior"
 
-    # 3) ENTRY — junior/entry/grad signals in the TITLE.
-    entry_sig = ["entry", "junior", "jr", "associate", "graduate", "grad",
-                 "trainee", "assistant", "i"]  # 'i' as a standalone level token
     if title_has(["entry level", "entry-level", "junior", "jr", "associate",
                   "graduate", "grad", "new grad", "early career"]):
         return "entry"
     if years and years <= 1:
         return "entry"
 
-    # 4) MID — explicit mid signals or 2–5 years.
     if title_has(["mid level", "mid-level", "intermediate", "ii"]) or (2 <= years <= 5):
         return "mid"
 
-    # 5) Weak description fallback for internships (whole word, guarded).
     if _has_word(d, ["internship", "intern position", "summer intern"]) and not looks_professional:
         return "internship"
 
-    # 6) Default — neutral professional bucket.
     return "mid"
 
 

@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS jobs (
     salary_min INTEGER,
     salary_max INTEGER,
     salary_currency TEXT DEFAULT 'USD',
+    country TEXT DEFAULT 'us',
     description TEXT,
     requirements TEXT,
     source TEXT NOT NULL,

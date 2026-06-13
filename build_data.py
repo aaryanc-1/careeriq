@@ -91,36 +91,48 @@ def build_careers(computed: dict) -> list:
     return careers
 
 
+def _country_meta_list():
+    """Country metadata for the dashboard's country tabs."""
+    try:
+        from data_collection.countries import COUNTRIES
+        return COUNTRIES
+    except Exception:
+        return [{"code": "us", "name": "United States", "currency": "USD", "symbol": "$", "flag": "🇺🇸"}]
+
+
 def build_data() -> dict:
     print("Building static data file for the dashboard...\n")
     computed = load_computed_weights()
     careers = build_careers(computed)
 
-    # Attach recent real job listings per career (the "Recent Openings" feature).
+    # Attach recent real job listings per career, grouped by country.
     # Reads from the DB if it exists; degrades gracefully to none if not.
     jobs_by_career = {}
     try:
         from data_collection.job_storage import get_recent_jobs_by_career
         jobs_by_career = get_recent_jobs_by_career(limit_per_career=25)
-        total_listed = sum(len(v) for v in jobs_by_career.values())
-        print(f"  Attached {total_listed} recent job listings across {len(jobs_by_career)} careers.")
+        total_listed = sum(len(jobs) for byc in jobs_by_career.values() for jobs in byc.values())
+        print(f"  Attached {total_listed} recent job listings across {len(jobs_by_career)} careers (multi-country).")
     except Exception as e:
         print(f"  No job listings attached ({e}). Careers will show an empty openings state.")
 
+    def _clean_date(j):
+        pa = j.get("posted_at")
+        if hasattr(pa, "isoformat"):
+            pa = pa.isoformat()[:10]
+        elif isinstance(pa, str) and pa:
+            pa = pa[:10]
+        else:
+            pa = None
+        return {**j, "posted_at": pa}
+
     for c in careers:
-        listings = jobs_by_career.get(c["name"], [])
-        # posted_at may be a datetime/date/string; store as ISO date string or None
-        clean = []
-        for j in listings:
-            pa = j.get("posted_at")
-            if hasattr(pa, "isoformat"):
-                pa = pa.isoformat()[:10]
-            elif isinstance(pa, str) and pa:
-                pa = pa[:10]
-            else:
-                pa = None
-            clean.append({**j, "posted_at": pa})
-        c["recent_jobs"] = clean
+        by_country = jobs_by_career.get(c["name"], {})
+        # produce a dict: country_code -> [cleaned jobs], newest first
+        cleaned = {}
+        for cc, listings in by_country.items():
+            cleaned[cc] = [_clean_date(j) for j in listings]
+        c["recent_jobs_by_country"] = cleaned
 
     data_driven_count = sum(1 for c in careers if c["data_driven"])
     total_jobs = sum(c["jobs_analyzed"] for c in careers)
@@ -139,6 +151,7 @@ def build_data() -> dict:
             "industries": sorted({c["industry"] for c in careers}),
         },
         "careers": careers,
+        "countries": _country_meta_list(),
         "skill_lookup": SKILL_LOOKUP,
         "category_lookup": CATEGORY_LOOKUP,
         "taxonomy": SKILLS_TAXONOMY,

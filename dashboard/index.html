@@ -417,6 +417,7 @@ let PROJECT_IDEAS = {};
 let DURATION_WEEKS = {};
 let CAREER_META = {};   // name -> { dataDriven, jobsAnalyzed, industry }
 let DATA_STATS = null;
+let COUNTRIES = [];     // [{code,name,currency,symbol,flag}]
 
 // Learning resources + durations are kept here (not in data.json) so the
 // roadmap still has links/timing for common skills. Unknown skills default
@@ -433,6 +434,7 @@ async function loadData() {
   const res = await fetch('data.json?v=' + Date.now());
   const data = await res.json();
   DATA_STATS = data.stats;
+  COUNTRIES = data.countries || [];
 
   // Build CAREER_PATHS in the shape the UI expects: {salary, growth, required, important, nice}
   data.careers.forEach(c => {
@@ -448,6 +450,7 @@ async function loadData() {
       jobsAnalyzed: c.jobs_analyzed || 0,
       industry: c.industry || 'Other',
       recentJobs: c.recent_jobs || [],
+      recentJobsByCountry: c.recent_jobs_by_country || {},
     };
   });
 
@@ -579,7 +582,7 @@ function generateRoadmap(userSkills, careerName) {
 
 // ── State ──────────────────────────────────────────────────────────────────────
 
-let state = { profile: null, matches: null, target: null, userLevel: 'entry', jobLevelFilter: 'all' };
+let state = { profile: null, matches: null, target: null, userLevel: 'entry', jobLevelFilter: 'all', jobCountry: null };
 
 // ── Main Analysis ──────────────────────────────────────────────────────────────
 
@@ -970,21 +973,37 @@ function salaryLabel(j) {
 
 function updateJobs() {
   const career = document.getElementById('jobs-career-select').value;
+  state.jobCountry = null; // reset to default country when career changes
   renderJobs(career);
 }
 
 function setJobLevel(level) {
   state.jobLevelFilter = level;
-  const career = document.getElementById('jobs-career-select').value;
-  renderJobs(career);
+  renderJobs(document.getElementById('jobs-career-select').value);
+}
+
+function setJobCountry(code) {
+  state.jobCountry = code;
+  renderJobs(document.getElementById('jobs-career-select').value);
+}
+
+function salaryLabelC(j) {
+  const sym = j.currency_symbol || '$';
+  if (j.salary_min && j.salary_max)
+    return `${sym}${Math.round(j.salary_min/1000)}k–${sym}${Math.round(j.salary_max/1000)}k`;
+  if (j.salary_min) return `from ${sym}${Math.round(j.salary_min/1000)}k`;
+  return 'Salary not listed';
 }
 
 function renderJobs(careerName) {
   const meta = CAREER_META[careerName] || {};
-  const allJobs = meta.recentJobs || [];
+  const byCountry = meta.recentJobsByCountry || {};
   const el = document.getElementById('jobs-content');
 
-  if (!allJobs.length) {
+  // Which countries actually have jobs for this career (data-driven tabs)
+  const availCodes = Object.keys(byCountry).filter(cc => (byCountry[cc]||[]).length);
+
+  if (!availCodes.length) {
     el.innerHTML = `
       <div class="card" style="text-align:center;padding:48px 24px">
         <div style="font-size:34px;margin-bottom:10px">🔍</div>
@@ -997,14 +1016,32 @@ function renderJobs(careerName) {
     return;
   }
 
-  // Count jobs at each level (for the filter button labels)
+  // Order tabs by COUNTRIES list, keep only available ones. Default = first (usually US) or current.
+  const orderedCodes = COUNTRIES.map(c => c.code).filter(cc => availCodes.includes(cc));
+  let activeCountry = state.jobCountry;
+  if (!activeCountry || !availCodes.includes(activeCountry)) activeCountry = orderedCodes[0];
+
+  const cmeta = cc => COUNTRIES.find(c => c.code === cc) || { name: cc.toUpperCase(), flag: '🌍' };
+
+  // Country tabs
+  const tabs = orderedCodes.map(cc => {
+    const m = cmeta(cc);
+    const n = (byCountry[cc]||[]).length;
+    const isA = cc === activeCountry;
+    return `<button onclick="setJobCountry('${cc}')" style="border:none;cursor:pointer;
+      padding:8px 14px;font-size:13px;font-weight:${isA?'600':'500'};border-radius:8px;
+      background:${isA?'var(--accent)':'rgba(255,255,255,0.06)'};color:${isA?'#fff':'var(--text)'}">
+      ${m.flag} ${m.name} <span style="opacity:0.7">${n}</span></button>`;
+  }).join('');
+
+  const allJobs = byCountry[activeCountry] || [];
+
+  // Level filter within the selected country
   const counts = { all: allJobs.length, internship:0, entry:0, mid:0, senior:0 };
   allJobs.forEach(j => { counts[j.level] = (counts[j.level]||0) + 1; });
-
   const active = state.jobLevelFilter || 'all';
   const shown = active === 'all' ? allJobs : allJobs.filter(j => j.level === active);
 
-  // Build the filter pills: All + the 4 levels, with counts. Highlight the active one.
   const pill = (key, label) => {
     const n = counts[key] || 0;
     const isActive = active === key;
@@ -1012,23 +1049,11 @@ function renderJobs(careerName) {
     const bg = isActive ? 'var(--accent)' : 'rgba(255,255,255,0.06)';
     const col = isActive ? '#fff' : 'var(--text)';
     return `<button onclick="${(key!=='all'&&n===0)?'':`setJobLevel('${key}')`}"
-      style="border:none;border-radius:20px;padding:7px 14px;font-size:12.5px;font-weight:500;
+      style="border:none;border-radius:20px;padding:6px 12px;font-size:12px;font-weight:500;
       background:${bg};color:${col};${dis}">${label} ${n?`<span style="opacity:0.7">${n}</span>`:''}</button>`;
   };
 
-  const filterBar = `
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
-      ${pill('all','All')}
-      ${pill('internship','Internship')}
-      ${pill('entry','Entry-Level')}
-      ${pill('mid','Mid-Level')}
-      ${pill('senior','Senior+')}
-    </div>`;
-
-  const levelNote = (active !== 'all' && active === state.userLevel)
-    ? `<span style="color:var(--accent)">Showing ${LEVEL_LABELS[active]} roles — matched to your profile</span>`
-    : (active !== 'all' ? `Filtered to ${LEVEL_LABELS[active]} roles` : 'Showing all levels');
-
+  const cm = cmeta(activeCountry);
   const jobsHtml = shown.length ? shown.map(j => `
         <div class="card" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
           <div style="flex:1;min-width:200px">
@@ -1038,7 +1063,7 @@ function renderJobs(careerName) {
             </div>
             <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap">
               <span class="stat-pill" style="background:rgba(124,107,255,0.15);color:#9d8dff">${LEVEL_LABELS[j.level]||'Level n/a'}</span>
-              <span class="stat-pill stat-salary">${salaryLabel(j)}</span>
+              <span class="stat-pill stat-salary">${salaryLabelC(j)}</span>
               <span class="stat-pill" style="background:rgba(255,255,255,0.05);color:var(--muted)">Posted ${timeAgo(j.posted_at)}</span>
             </div>
           </div>
@@ -1046,24 +1071,26 @@ function renderJobs(careerName) {
         </div>
       `).join('') : `
         <div class="card" style="text-align:center;padding:32px;color:var(--muted);font-size:13.5px">
-          No ${LEVEL_LABELS[active]} openings for ${careerName} in this batch. Try another level above.
+          No ${LEVEL_LABELS[active]} openings for ${careerName} in ${cm.name} right now. Try another level or country.
         </div>`;
 
   el.innerHTML = `
-    <div class="card" style="margin-bottom:16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px">
-        <div style="font-size:13.5px;color:var(--text)">
-          <strong>${careerName}</strong> · ${levelNote}
-        </div>
-        <div style="font-size:12px;color:var(--muted)">
-          Updated weekly · levels are estimated · job data via Adzuna
-        </div>
+    <div class="card" style="margin-bottom:14px">
+      <div style="font-size:12.5px;color:var(--muted);margin-bottom:10px">Select a country — salaries shown in local currency</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">${tabs}</div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+        <div style="font-size:13.5px;color:var(--text)"><strong>${careerName}</strong> · ${cm.flag} ${cm.name}</div>
+        <div style="font-size:12px;color:var(--muted)">Updated weekly · levels estimated · via Adzuna</div>
       </div>
-      ${filterBar}
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${pill('all','All')} ${pill('internship','Internship')} ${pill('entry','Entry-Level')} ${pill('mid','Mid-Level')} ${pill('senior','Senior+')}
+      </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px">${jobsHtml}</div>
     <div style="font-size:11.5px;color:var(--muted);margin-top:16px;text-align:center">
-      Openings are a snapshot from our most recent data refresh and may no longer be available. Seniority levels are estimated from the job title. Always confirm on the employer's site.
+      Openings are a snapshot from our most recent refresh and may no longer be available. Salaries are shown in each country's local currency, exactly as posted — never converted. Always confirm on the employer's site.
     </div>`;
 }
 

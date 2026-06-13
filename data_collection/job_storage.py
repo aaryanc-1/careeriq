@@ -31,12 +31,13 @@ def insert_job(cur, job: dict):
     cur.execute("""
         INSERT OR IGNORE INTO jobs
             (external_id, title, company_id, location, salary_min, salary_max,
-             description, url, posted_at, source)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             salary_currency, country, description, url, posted_at, source)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, (
         job.get("external_id"), job.get("title"), company_id, job.get("location"),
-        job.get("salary_min"), job.get("salary_max"), job.get("description"),
-        job.get("url"), job.get("posted_at"), job.get("source"),
+        job.get("salary_min"), job.get("salary_max"),
+        job.get("currency", "USD"), job.get("country", "us"),
+        job.get("description"), job.get("url"), job.get("posted_at"), job.get("source"),
     ))
     if cur.rowcount == 0:
         return None                      # was a duplicate, INSERT OR IGNORE skipped it
@@ -97,13 +98,15 @@ def get_recent_jobs_by_career(limit_per_career: int = 25) -> dict:
     # Import here to avoid a circular import at module load time.
     from data_collection.career_keywords import get_career_for_title
     from utils.level_detection import detect_job_level
+    from data_collection.countries import meta as country_meta
 
     conn = get_connection()
     try:
         cur = conn.cursor()
         cur.execute("""
             SELECT j.title, c.name AS company, j.location,
-                   j.salary_min, j.salary_max, j.url, j.posted_at, j.description
+                   j.salary_min, j.salary_max, j.salary_currency, j.country,
+                   j.url, j.posted_at, j.description
             FROM jobs j
             LEFT JOIN companies c ON c.id = j.company_id
             WHERE j.title IS NOT NULL
@@ -113,23 +116,29 @@ def get_recent_jobs_by_career(limit_per_career: int = 25) -> dict:
     finally:
         conn.close()
 
+    # Structure: { career: { country_code: [jobs...] } }
     grouped = {}
     for r in rows:
         career = get_career_for_title(r["title"])
         if not career:
             continue
-        bucket = grouped.setdefault(career, [])
+        cc = r["country"] or "us"
+        by_country = grouped.setdefault(career, {})
+        bucket = by_country.setdefault(cc, [])
         if len(bucket) >= limit_per_career:
             continue
+        cm = country_meta(cc)
         bucket.append({
             "title": r["title"],
             "company": r["company"] or "",
             "location": r["location"] or "",
             "salary_min": r["salary_min"],
             "salary_max": r["salary_max"],
+            "currency_symbol": cm["symbol"],
             "url": r["url"] or "",
             "posted_at": r["posted_at"],
             "level": detect_job_level(r["title"], r["description"] or "",
-                                       r["salary_min"], r["salary_max"]),
+                                       r["salary_min"], r["salary_max"],
+                                       r["salary_currency"] or "USD"),
         })
     return grouped
